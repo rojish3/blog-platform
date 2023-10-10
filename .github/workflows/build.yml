@@ -10,6 +10,7 @@ env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
 jobs:
+  #Build project
   build-project:
     runs-on: ubuntu-latest
 
@@ -18,23 +19,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      #Install dependencies and run for client application
-      - name: Install Dependencies and build client application
+      #Install dependencies for client application
+      - name: Install Dependencies for client application
         working-directory: ./fe
-        run: |
-          npm install
-          npm run build
+        run: npm install
+
+      #Build client application
+      - name: Build client application
+        working-directory: ./fe
+        run: npm run build
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: blog-application
           path: dist/
-      - name: Install Dependencies and build server application
+      - name: Install Dependencies for server application
+        working-directory: ./be
+        run: npm install
+
+      #Build server application
+      - name: Build server application
         working-directory: ./be
         run: |
-          npm install
           export MONGODB_URI=$MONGODB_URI
           npm run build
+
+  #Create downloadable artifact
   release-project:
     name: Release Project
     runs-on: ubuntu-latest
