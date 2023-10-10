@@ -29,10 +29,10 @@ jobs:
       - name: Build client application
         working-directory: ./fe
         run: npm run build
-      - name: List Files and Folders in dist/
-        run: |
-          cd $GITHUB_WORKSPACE
-          find . -type d -exec echo {} \
+      # - name: List Files and Folders in dist/
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     find . -type d -exec echo {} \
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
