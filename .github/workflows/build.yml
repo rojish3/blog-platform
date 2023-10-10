@@ -29,4 +29,4 @@ jobs:
         run: |
           npm install
           export MONGODB_URI=$MONGODB_URI
-          npm run build
+          npm build
