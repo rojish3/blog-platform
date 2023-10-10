@@ -10,7 +10,7 @@ env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
 jobs:
-  build:
+  build-project:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,13 +29,20 @@ jobs:
         with:
           name: blog-application
           path: dist/
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: blog-application
-      - name: Install Dependencies in server
+      - name: Install Dependencies and build server application
         working-directory: ./be
         run: |
           npm install
           export MONGODB_URI=$MONGODB_URI
           npm run build
+  release-project:
+    name: Release Project
+    runs-on: ubuntu-latest
+    needs: build-project
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: blog-application
+      - name: Test artifact download
+        run: ls -R
