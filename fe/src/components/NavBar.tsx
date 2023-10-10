@@ -2,7 +2,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { BsSun, BsMoon } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../features/themeSlice";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 interface AppState {
   theme: boolean;
@@ -13,7 +13,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   return (
     <>
-      <nav className="flex justify-between p-4 md:p-8">
+      <nav className="flex justify-between items-center md:p-8">
         <div className="text-2xl cursor-pointer" onClick={() => navigate("/")}>
           Blog
         </div>
@@ -44,14 +44,28 @@ const NavBar = () => {
         <div className="hidden md:block">
           <ul className="flex items-center gap-12">
             <li>
-              <a className="cursor-pointer" onClick={() => navigate("/")}>
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-700 underline rounded-lg font-bold transition-all duration-200 ease-in-out"
+                    : "hover:text-blue-600 font-semibold"
+                }
+              >
                 HOME
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a className="cursor-pointer" onClick={() => navigate("/blogs")}>
+              <NavLink
+                to="/blogs"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-700 underline rounded-lg font-bold transition-all duration-200 ease-in-out"
+                    : "hover:text-blue-600 font-semibold"
+                }
+              >
                 BLOGS
-              </a>
+              </NavLink>
             </li>
             <li>
               <a className="cursor-pointer">ABOUT US</a>

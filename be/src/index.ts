@@ -5,6 +5,7 @@ import cors from "cors";
 dotenv.config();
 import { env } from "./config/index";
 import connectDb from "./config/database";
+import userRoutes from "./User";
 
 connectDb();
 
@@ -19,11 +20,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.use("/", (req: Request, res: Response) => {
-  res.send("Hello World");
-});
-
-// app.use("/user", userRoutes());
+app.use("/api", userRoutes());
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

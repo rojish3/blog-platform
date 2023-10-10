@@ -1,0 +1,23 @@
+name: Blog-application CICD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      #Checkout the code from github repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      #Install dependencies and run for client application
+      - name: Install Dependencies
+        working-directory: ./fe
+        run: |
+          npm install
+          export MONGODB_URI=$MONGODB_URI

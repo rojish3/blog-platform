@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { FieldValues, useForm } from "react-hook-form";
+
+import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import RegisterImg from "../assets/register.png";
@@ -14,15 +16,23 @@ const Login = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen p-4 md:px-8">
         <NavBar />
-        <div className="flex justify-center gap-12">
+        <div className="flex justify-center gap-12 mt-12">
           <div className="hidden md:block w-fit">
             <img src={RegisterImg} alt="Register" className="h-[550px]" />
           </div>
-          <form className="flex flex-col items-center gap-3 p-4 w-[350px] max-w-[450px]">
+
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col items-center p-4 gap-3 w-[350px] max-w-[450px]"
+          >
             <div>
               <label className="mt-2 text-sm font-medium text-gray-900">
                 Email
@@ -36,7 +46,10 @@ const Login = () => {
                       message: "Invalid Email, please enter valid email",
                     },
                   })}
-                  className="border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10"
+                  className={classNames(
+                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    { "border-red-500 focus:outline-red-500": errors.email }
+                  )}
                   placeholder="Enter Email adderss"
                 />
                 {errors.email && (
@@ -63,12 +76,17 @@ const Login = () => {
                     },
                   })}
                   type={showPassword ? "text" : "password"}
-                  className="border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10"
+                  className={classNames(
+                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    {
+                      "border-red-500 focus:outline-red-500": errors.password,
+                    }
+                  )}
                   placeholder="Enter Password"
                 />
                 <button
                   type="button"
-                  className="absolute top-2 right-2 text-gray-500"
+                  className="absolute top-2 right-2 text-gray-700"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -87,7 +105,7 @@ const Login = () => {
             <button
               disabled={isSubmitting}
               type="submit"
-              className="w-full min-w-[350px] mt-8 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
+              className="px-4 min-w-[350px] mt-8 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
             >
               {isSubmitting ? "Logging In..." : "Log In"}
             </button>
