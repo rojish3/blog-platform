@@ -45,7 +45,9 @@ jobs:
         run: |
           export MONGODB_URI=$MONGODB_URI
           npm run build
-
+      - name: List Files and Folders in dist/
+        run: |
+          ls -l
   #Create downloadable artifact
   release-project:
     name: Release Project
