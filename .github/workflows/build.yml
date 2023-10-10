@@ -12,6 +12,7 @@ env:
 jobs:
   #Build project
   build-project:
+    name: Build Project
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: blog-application
-          path: dist/
+          path: .dist/
       - name: Install Dependencies for server application
         working-directory: ./be
         run: npm install
