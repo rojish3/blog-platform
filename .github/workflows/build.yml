@@ -24,6 +24,15 @@ jobs:
         run: |
           npm install
           npm run build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: blog-application
+          path: dist/
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: blog-application
       - name: Install Dependencies in server
         working-directory: ./be
         run: |
