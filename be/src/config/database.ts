@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { env } from "./index";
 
-const uri: string = env.MONGO_URI ?? "";
+const uri: string = env.MONGODB_URI ?? "";
 // console.log(uri);
 
 const connectDb = async () => {
