@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { z } from "zod";
+// import { z } from "zod";
 import classNames from "classnames";
 import NavBar from "../components/NavBar";
 import RegisterImg from "../assets/register.png";
@@ -21,7 +21,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     getValues,
     formState: { errors, isSubmitting },
   } = useForm();

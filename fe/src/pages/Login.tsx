@@ -13,11 +13,11 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: FieldValues) => {
     console.log(data);
   };
   return (

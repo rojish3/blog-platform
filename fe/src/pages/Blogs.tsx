@@ -1,5 +1,3 @@
-import { AiOutlineSearch } from "react-icons/ai";
-
 import NavBar from "../components/NavBar";
 import BlogCard from "../components/BlogCard";
 

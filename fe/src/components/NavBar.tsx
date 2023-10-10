@@ -8,7 +8,7 @@ interface AppState {
   theme: boolean;
 }
 const NavBar = () => {
-  const { mode } = useSelector((state: AppState) => state.theme);
+  const { mode }: any = useSelector((state: AppState) => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
