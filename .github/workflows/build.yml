@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: blog-application
-          path: .dist/
+          path: .fe/dist/
       - name: Install Dependencies for server application
         working-directory: ./be
         run: npm install
