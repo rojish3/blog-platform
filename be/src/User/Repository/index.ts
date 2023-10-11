@@ -6,16 +6,20 @@ export interface UserDocument extends Document {
   email: string;
   phoneNumber: number;
   password: string;
-  profilePicture: string;
+  profilePicture?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-interface IUser {
+export interface IUser {
   fullName: string;
   gender: string;
   email: string;
   phoneNumber: number;
   password: string;
-  profilePicture: string;
+  profilePicture?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -39,7 +43,20 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: [true, "Password cannot be empty"],
   },
-  profilePicture: String,
+  profilePicture: {
+    type: String,
+    path: String,
+  },
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now(),
+  },
+  updatedAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now(),
+  },
 });
 
 const UserModel = mongoose.model<IUser>("user", userSchema);

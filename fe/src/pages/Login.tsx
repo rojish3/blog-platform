@@ -22,16 +22,20 @@ const Login = () => {
   };
   return (
     <>
-      <div className="h-screen p-4 md:px-8">
+      <div className="h-screen">
         <NavBar />
-        <div className="flex justify-center gap-12 mt-12">
+        <div className="flex justify-center gap-12 p-4 md:px-8">
           <div className="hidden md:block w-fit">
-            <img src={RegisterImg} alt="Register" className="h-[550px]" />
+            <img
+              src={RegisterImg}
+              alt="Register"
+              className="h-[550px] object-contain"
+            />
           </div>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col items-center p-4 gap-3 w-[350px] max-w-[450px]"
+            className="flex flex-col items-center p-4 md:p-0 gap-1 w-[350px] max-w-[450px]"
           >
             <div>
               <label className="mt-2 text-sm font-medium text-gray-900">

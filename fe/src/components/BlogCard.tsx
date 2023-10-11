@@ -1,8 +1,7 @@
 const BlogCard = () => {
   return (
     <>
-      '
-      <div className="h-96 w-64 md:h-[650px] md:w-[450px] mt-8 m-auto">
+      <div className="h-96 w-64 md:h-[650px] md:w-[450px] mt-8 m-auto cursor-pointer">
         <img
           className="h-1/2 w-full object-contain"
           src="https://static-01.daraz.com.np/p/d6271a012276f7ba4fee8d904e0745d6.jpg_300x0q75.webp"

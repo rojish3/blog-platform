@@ -3,44 +3,58 @@ import { BsSun, BsMoon } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../features/themeSlice";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+// import { set } from "zod";
+import SideBar from "./SideBar";
 
 interface AppState {
   theme: boolean;
 }
 const NavBar = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  useEffect(() => {
+    const darkModeToggle = document.getElementById("data-mode");
+    if (mode) {
+      darkModeToggle?.classList.add("dark");
+    } else {
+      darkModeToggle?.classList.remove("dark");
+    }
+  }, [mode]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <>
-      <nav className="flex justify-between items-center md:p-8">
+      <nav className="flex justify-between items-center p-4 md:p-6">
         <div className="text-2xl cursor-pointer" onClick={() => navigate("/")}>
           Blog
         </div>
-        <div className="flex gap-4 md:hidden">
+
+        {/* Mobile Burger Menu */}
+        <section className="flex items-center gap-6 md:hidden z-20">
           {mode ? (
             <div
               className="cursor-poiner"
-              //   style={{
-              //     backgroundColor: mode ? "black" : "white",
-              //   }}
               onClick={() => dispatch(toggleTheme())}
             >
-              <BsMoon />
+              <BsMoon size={24} />
             </div>
           ) : (
             <div
               className="cursor-poiner"
-              //   style={{ backgroundColor: mode ? "black" : "white" }}
               onClick={() => dispatch(toggleTheme())}
             >
-              <BsSun />
+              <BsSun size={24} />
             </div>
           )}
-          <div className="cursor-poiner">
-            <AiOutlineMenu />
+          <div
+            className="space-y-2"
+            onClick={() => setShowSidebar((prev) => !prev)}
+          >
+            <AiOutlineMenu size={25} />
           </div>
-        </div>
+          <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+        </section>
         <div className="hidden md:block">
           <ul className="flex items-center gap-12">
             <li>

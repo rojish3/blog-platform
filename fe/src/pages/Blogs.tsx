@@ -12,7 +12,7 @@ const Blogs = () => {
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
             Reiciendis, quaerat. Veritatis, at!
           </p>
-          <div className="absolute z-20 left-[50%] -bottom-5 w-[70vw] md:max-w-[50vw]">
+          <div className="absolute z-10 left-[50%] -bottom-5 w-[70vw] md:max-w-[50vw]">
             <input
               type="text"
               placeholder="Search Blog"

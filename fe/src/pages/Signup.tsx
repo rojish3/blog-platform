@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 // import { z } from "zod";
 import classNames from "classnames";
 import NavBar from "../components/NavBar";
@@ -26,19 +27,34 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const onSubmit = async (data: FieldValues) => {
+    try {
+      console.log(data);
+      const postData = await axios.post(
+        "http://localhost:3000/api/users",
+        data
+      );
+      console.log(postData);
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        console.log(error);
+      }
+    }
   };
   return (
     <>
-      <div className="h-screen p-4 md:px-8">
+      <div className="h-screen">
         <NavBar />
-        <div className="flex justify-center gap-12 mt-12">
-          <div className="hidden lg:block w-fit">
-            <img src={RegisterImg} alt="Register" className="h-[550px]" />
+        <div className="flex justify-center gap-12 p-4 md:px-8">
+          <div className="hidden md:block w-fit">
+            <img
+              src={RegisterImg}
+              alt="Register"
+              className="h-[550px] object-contain"
+            />
           </div>
           <form
-            className="gap-2 md:gap-3 p-4 w-[350px] max-w-[450px] flex flex-col justify-center items-center"
+            className="gap-1 md:gap-3 p-4 md:p-0 w-[350px] max-w-[450px] flex flex-col justify-center items-center"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div>
@@ -273,11 +289,34 @@ const Login = () => {
                 <p className="text-sm text-red-600">{`${errors.confirmPassword.message}`}</p>
               )}
             </div>
+            <div>
+              <label className="block mt-2 text-sm font-medium text-gray-900">
+                Profile Picture
+              </label>
+              <div className="h-10 w-full min-w-[350px]">
+                <input
+                  {...register("profilePicture")}
+                  type="file"
+                  className={classNames({
+                    // button colors
+                    "file:bg-blue-50 file:text-blue-500 hover:file:bg-blue-100":
+                      true,
+                    // button shape and spacing
+                    "file:rounded-lg file:rounded-tr-none file:rounded-br-none":
+                      true,
+                    "file:px-4 file:py-2 file:mr-4 file:border-none": true,
+                    // overall input styling
+                    "hover:cursor-pointer border rounded-lg text-gray-400 text-sm w-full block":
+                      true,
+                  })}
+                />
+              </div>
+            </div>
 
             <button
               disabled={isSubmitting}
               type="submit"
-              className="w-full min-w-[350px] mt-3 lg:mt-4 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
+              className="w-full min-w-[350px] mt-2 lg:mt-3 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
             >
               {isSubmitting ? "Signing Up..." : "Sign Up"}
             </button>
