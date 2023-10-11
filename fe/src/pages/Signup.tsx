@@ -3,6 +3,8 @@ import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { z } from "zod";
 import classNames from "classnames";
 import NavBar from "../components/NavBar";
@@ -30,11 +32,17 @@ const Login = () => {
   const onSubmit = async (data: FieldValues) => {
     try {
       console.log(data);
-      const postData = await axios.post(
+      const userData = await axios.post(
         "http://localhost:3000/api/users",
         data
       );
-      console.log(postData);
+      if (userData.status === 200) {
+        toast.success(userData.data);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+      console.log(userData);
     } catch (error: any) {
       if (error.response.status === 401) {
         console.log(error);
@@ -43,7 +51,7 @@ const Login = () => {
   };
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
         <NavBar />
         <div className="flex justify-center gap-12 p-4 md:px-8">
           <div className="hidden md:block w-fit">
@@ -58,7 +66,7 @@ const Login = () => {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div>
-              <label className="mt-2 text-sm font-medium text-gray-900">
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Full Name
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
@@ -70,7 +78,7 @@ const Login = () => {
                     },
                   })}
                   className={classNames(
-                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
                     { "border-red-500 focus:outline-red-500": errors.fullName }
                   )}
                   placeholder="John Doe"
@@ -81,24 +89,24 @@ const Login = () => {
               </div>
             </div>
             <div>
-              <label className="mt-2 text-sm font-medium text-gray-900">
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Gender
               </label>
               <div className="flex flex-row items-start mb-2 gap-4 md:gap-8 w-full min-w-[350px]">
                 <div className="flex items-center">
                   <input
                     {...register("gender", {
-                      required: "This field is required",
+                      required: "required*",
                     })}
                     id="male-radio"
                     type="radio"
                     value="Male"
                     name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 focus:ring-blue-500 dark:focus:ring-blue-600"
                   />
                   <label
                     htmlFor="male-radio"
-                    className="ml-2 text-sm font-medium text-gray-900"
+                    className="ml-2 text-sm font-medium text-inherit"
                   >
                     Male
                   </label>
@@ -106,17 +114,17 @@ const Login = () => {
                 <div className="flex items-center">
                   <input
                     {...register("gender", {
-                      required: "This field is required",
+                      required: "required*",
                     })}
                     id="female-radio"
                     type="radio"
                     value="Female"
                     name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 focus:ring-blue-500 dark:focus:ring-blue-600"
                   />
                   <label
                     htmlFor="female-radio"
-                    className="ml-2 text-sm font-medium text-gray-900"
+                    className="ml-2 text-sm font-medium text-inherit"
                   >
                     Female
                   </label>
@@ -124,29 +132,29 @@ const Login = () => {
                 <div className="flex items-center">
                   <input
                     {...register("gender", {
-                      required: "This field is required",
+                      required: "required*",
                     })}
                     id="others-radio"
                     type="radio"
                     value="Others"
                     name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 focus:ring-blue-500 dark:focus:ring-blue-600"
                   />
                   <label
                     htmlFor="others-radio"
-                    className="ml-2 text-sm font-medium text-gray-900"
+                    className="ml-2 text-sm font-medium text-inherit"
                   >
                     Others
                   </label>
                 </div>
                 {errors.gender && (
-                  <p className="text-xs text-red-600">{`${errors.gender.message}`}</p>
+                  <p className="text-sm text-red-600">{`${errors.gender.message}`}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <label className="mt-2 text-sm font-medium text-gray-900">
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Phone Number
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
@@ -166,7 +174,7 @@ const Login = () => {
                   })}
                   type="text"
                   className={classNames(
-                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
                     {
                       "border-red-500 focus:outline-red-500":
                         errors.phoneNumber,
@@ -180,7 +188,7 @@ const Login = () => {
               </div>
             </div>
             <div>
-              <label className="mt-2 text-sm font-medium text-gray-900">
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Email
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
@@ -193,7 +201,7 @@ const Login = () => {
                     },
                   })}
                   className={classNames(
-                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
                     { "border-red-500 focus:outline-red-500": errors.email }
                   )}
                   placeholder="johndoe@example.com"
@@ -204,10 +212,10 @@ const Login = () => {
               </div>
             </div>
             <div>
-              <label className="block mt-2 text-sm font-medium text-gray-900">
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Password
               </label>
-              <div className="relative h-10 w-full min-w-[350px]">
+              <div className="relative h-12 w-full min-w-[350px]">
                 <input
                   {...register("password", {
                     required: "Password cannot be empty",
@@ -222,14 +230,16 @@ const Login = () => {
                   })}
                   type={showPassword ? "text" : "password"}
                   className={classNames(
-                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
-                    { "border-red-500 focus:outline-red-500": errors.password }
+                    "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    {
+                      "border-red-500 focus:outline-red-500": errors.password,
+                    }
                   )}
                   placeholder="********"
                 />
                 <button
                   type="button"
-                  className="absolute top-2 right-2 text-gray-500"
+                  className="absolute top-2 right-2 text-gray-600"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -238,17 +248,16 @@ const Login = () => {
                     <BiSolidShow size={25} />
                   )}
                 </button>
-
                 {errors.password && (
                   <p className="text-sm text-red-600">{`${errors.password.message}`}</p>
                 )}
               </div>
             </div>
             <div>
-              <label className="block mt-2 text-sm font-medium text-gray-900">
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Confirm Password
               </label>
-              <div className="relative h-10 w-full min-w-[350px]">
+              <div className="relative h-12 w-full min-w-[350px]">
                 <input
                   {...register("confirmPassword", {
                     required: "Password cannot be empty",
@@ -265,17 +274,16 @@ const Login = () => {
                   })}
                   type={showPassword ? "text" : "password"}
                   className={classNames(
-                    "border focus:outline-blue-500 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
                     {
-                      "border-red-500 focus:outline-red-500":
-                        errors.confirmPassword,
+                      "border-red-500 focus:outline-red-500": errors.password,
                     }
                   )}
                   placeholder="********"
                 />
                 <button
                   type="button"
-                  className="absolute top-2 right-2 text-gray-500"
+                  className="absolute top-2 right-2 text-gray-600"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -289,34 +297,34 @@ const Login = () => {
                 <p className="text-sm text-red-600">{`${errors.confirmPassword.message}`}</p>
               )}
             </div>
-            <div>
-              <label className="block mt-2 text-sm font-medium text-gray-900">
+            {/* <div>
+              <label className="mt-2 text-sm font-medium text-inherit">
                 Profile Picture
               </label>
-              <div className="h-10 w-full min-w-[350px]">
+              <div className="h-12 w-full min-w-[350px]">
                 <input
                   {...register("profilePicture")}
                   type="file"
                   className={classNames({
                     // button colors
-                    "file:bg-blue-50 file:text-blue-500 hover:file:bg-blue-100":
+                    "file:bg-blue-50 file:dark:bg-blue-400 file:dark:text-blue-50 file:text-blue-500 hover:file:bg-blue-100":
                       true,
                     // button shape and spacing
                     "file:rounded-lg file:rounded-tr-none file:rounded-br-none":
                       true,
-                    "file:px-4 file:py-2 file:mr-4 file:border-none": true,
+                    "file:px-4 file:py-2 file:mr-4 file:border-none ": true,
                     // overall input styling
-                    "hover:cursor-pointer border rounded-lg text-gray-400 text-sm w-full block":
+                    "hover:cursor-pointer border-2 rounded-lg text-gray-400 border-gray-500 text-sm w-full block focus:ring-blue-500 focus:border-blue-500":
                       true,
                   })}
                 />
               </div>
-            </div>
+            </div> */}
 
             <button
               disabled={isSubmitting}
               type="submit"
-              className="w-full min-w-[350px] mt-2 lg:mt-3 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
+              className="w-full min-w-[350px] mt-2 lg:mt-3 text-blue-700 hover:text-white border-2 border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
             >
               {isSubmitting ? "Signing Up..." : "Sign Up"}
             </button>
@@ -332,6 +340,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer autoClose={1000} />
     </>
   );
 };

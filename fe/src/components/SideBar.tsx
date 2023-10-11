@@ -9,7 +9,7 @@ const SideBar: React.FC<ISidebar> = ({ showSidebar, setShowSidebar }) => {
   if (showSidebar) {
     return (
       <>
-        <div className="z-50 bg-white">
+        <div className="z-50 bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
           <div className={showSidebar ? "showMenuNav" : "hideMenuNav"}>
             <div
               className="absolute top-1 right-0 px-4 py-4"
@@ -64,12 +64,12 @@ const SideBar: React.FC<ISidebar> = ({ showSidebar, setShowSidebar }) => {
             }
             .showMenuNav {
                 display: block;
-                position: absolute;
+                position: fixed;
                 width: 100%;
                 height: 100vh;
                 top: 0;
                 left: 0;
-                background: white;
+                background: inherit;
                 z-index: 10;
                 display: flex;
                 flex-direction: column;

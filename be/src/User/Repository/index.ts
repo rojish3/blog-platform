@@ -31,13 +31,13 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: [true, "This field is required"],
   },
-  email: {
-    type: String,
-    required: [true, "Email cannot be empty"],
-  },
   phoneNumber: {
     type: Number,
     required: [true, "Phone number cannot be empty"],
+  },
+  email: {
+    type: String,
+    required: [true, "Email cannot be empty"],
   },
   password: {
     type: String,

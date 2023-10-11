@@ -10,6 +10,7 @@ import SideBar from "./SideBar";
 interface AppState {
   theme: boolean;
 }
+
 const NavBar = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
@@ -25,36 +26,12 @@ const NavBar = () => {
   const navigate = useNavigate();
   return (
     <>
-      <nav className="flex justify-between items-center p-4 md:p-6">
+      <nav className="sticky top-0 left-0 z-10 h-[10vh] flex justify-between items-center p-4 md:p-6">
         <div className="text-2xl cursor-pointer" onClick={() => navigate("/")}>
           Blog
         </div>
 
-        {/* Mobile Burger Menu */}
-        <section className="flex items-center gap-6 md:hidden z-20">
-          {mode ? (
-            <div
-              className="cursor-poiner"
-              onClick={() => dispatch(toggleTheme())}
-            >
-              <BsMoon size={24} />
-            </div>
-          ) : (
-            <div
-              className="cursor-poiner"
-              onClick={() => dispatch(toggleTheme())}
-            >
-              <BsSun size={24} />
-            </div>
-          )}
-          <div
-            className="space-y-2"
-            onClick={() => setShowSidebar((prev) => !prev)}
-          >
-            <AiOutlineMenu size={25} />
-          </div>
-          <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-        </section>
+        <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
         <div className="hidden md:block">
           <ul className="flex items-center gap-12">
             <li>
@@ -84,6 +61,23 @@ const NavBar = () => {
             <li>
               <a className="cursor-pointer">ABOUT US</a>
             </li>
+            <div className="md:block cursor-pointer">
+              {mode ? (
+                <div
+                  className="cursor-poiner"
+                  onClick={() => dispatch(toggleTheme())}
+                >
+                  <BsMoon size={24} />
+                </div>
+              ) : (
+                <div
+                  className="cursor-poiner"
+                  onClick={() => dispatch(toggleTheme())}
+                >
+                  <BsSun size={24} />
+                </div>
+              )}
+            </div>
             <li>
               <button
                 type="button"
@@ -100,6 +94,33 @@ const NavBar = () => {
             </li> */}
           </ul>
         </div>
+        {/* Mobile Burger Menu */}
+        <section className="flex items-center gap-6 md:hidden">
+          <div className="md:block">
+            {mode ? (
+              <div
+                className="cursor-poiner"
+                onClick={() => dispatch(toggleTheme())}
+              >
+                <BsMoon size={24} />
+              </div>
+            ) : (
+              <div
+                className="cursor-poiner"
+                onClick={() => dispatch(toggleTheme())}
+              >
+                <BsSun size={24} />
+              </div>
+            )}
+          </div>
+
+          <div
+            className="space-y-2"
+            onClick={() => setShowSidebar((prev) => !prev)}
+          >
+            <AiOutlineMenu size={25} />
+          </div>
+        </section>
       </nav>
     </>
   );

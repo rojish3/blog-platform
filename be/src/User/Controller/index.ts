@@ -4,16 +4,7 @@ import { IUser } from "../Repository";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const user = {
-      fullName: req.body.fullName,
-      gender: req.body.gender,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      password: req.body.password,
-      profilePicture: req.file,
-    };
-    console.log(user);
-    // res.status(200).json(await UserServices.createUser(user));
+    res.status(200).json(await UserServices.createUser({ ...req.body }));
   } catch (error) {
     res.status(400).json(error);
   }
