@@ -54,6 +54,21 @@ const SideBar: React.FC<ISidebar> = ({ showSidebar, setShowSidebar }) => {
                 ABOUT US
                 {/* </NavLink> */}
               </li>
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-700 underline rounded-lg font-bold transition-all duration-200 ease-in-out"
+                    : "hover:text-blue-600 font-semibold"
+                }
+              >
+                <button
+                  type="button"
+                  className="px-4 mt-4 w-28 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-xl rounded-lg text-xl p-3 text-center mb-2 transition-all ease-in-out duration-300"
+                >
+                  Log in
+                </button>
+              </NavLink>
             </ul>
           </div>
         </div>

@@ -7,8 +7,8 @@ const Home = () => {
   return (
     <>
       <div>
-        <NavBar />
-        <div className="h-screen bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
+        <div className="h-screen text-primary-text dark:text-darkMode-tex bg-center bg-no-repeat background">
+          <NavBar />
           <div className="flex flex-col justify-center items-center h-[70%] gap-4">
             <h1 className="text-3xl text-center">
               EXPRESS YOURSELF WITH WORDS

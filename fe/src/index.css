@@ -10,3 +10,9 @@
 .content-font {
   font-family: "Poppins";
 }
+
+.background {
+  background-image: url("./assets/background.jpg");
+  background-size: cover;
+  color: white;
+}
