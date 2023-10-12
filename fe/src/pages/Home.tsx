@@ -5,7 +5,9 @@ import { blogData } from "../data/blogData";
 
 const Home = () => {
   const navigate = useNavigate();
-  const sortedData = blogData.sort((a, b) => b.date - a.date);
+  const sortedData = blogData.sort(
+    (a: { date: any }, b: { date: any }) => b.date - a.date
+  );
   const latestPosts = sortedData.slice(0, 3);
   console.log(latestPosts);
   return (
