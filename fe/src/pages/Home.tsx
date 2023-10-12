@@ -12,8 +12,8 @@ const Home = () => {
   console.log(latestPosts);
   return (
     <>
-      <div>
-        <div className="h-screen relative text-black dark:text-darkMode-text bg-center background bg-no-repeat backdrop-brightness-50">
+      <div className="bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
+        <div className="h-screen relative bg-center background bg-no-repeat backdrop-brightness-50">
           <NavBar />
           <div className="flex flex-col justify-center items-center h-[70%] gap-4">
             <h1 className="text-3xl font-bold text-center">
