@@ -22,11 +22,37 @@ const NavBar = () => {
       darkModeToggle?.classList.remove("dark");
     }
   }, [mode]);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check the scroll position, for example, 100px from the top
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    // Attach the scroll event listener when the component mounts
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <>
-      <nav className="sticky top-0 left-0 z-10 h-[10vh] flex justify-between items-center p-4 md:p-6">
+      <nav
+        className={`sticky top-0 left-0 z-10 h-[10vh] flex justify-between items-center p-4 md:p-6 ${
+          scrolled && mode
+            ? "bg-black bg-opacity-90 transition-all ease-in-out duration-300"
+            : scrolled && !mode
+            ? "bg-white bg-opacity-90 transition-all ease-in-out duration-300"
+            : "" // Add your CSS class for the background color change here
+        }`}
+      >
         <div className="text-2xl cursor-pointer" onClick={() => navigate("/")}>
           Blog
         </div>

@@ -1,5 +1,6 @@
 import NavBar from "../components/NavBar";
 import BlogCard from "../components/BlogCard";
+import { blogData } from "../data/blogData";
 
 const Blogs = () => {
   return (
@@ -13,7 +14,11 @@ const Blogs = () => {
             Reiciendis, quaerat. Veritatis, at!
           </p>
         </div>
-        <BlogCard />
+        <div className="flex flex-wrap">
+          {blogData.map((blog) => (
+            <BlogCard key={blog.id} blog={blog} />
+          ))}
+        </div>
       </div>
     </>
   );
