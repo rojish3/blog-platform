@@ -12,7 +12,7 @@ const SideBar: React.FC<ISidebar> = ({ showSidebar, setShowSidebar }) => {
         <div className="z-50 bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
           <div className={showSidebar ? "showMenuNav" : "hideMenuNav"}>
             <div
-              className="absolute top-1 right-0 px-4 py-4"
+              className="absolute top-3 right-0 px-4 py-4"
               onClick={() => setShowSidebar(false)}
             >
               <AiOutlineClose size={25} />
