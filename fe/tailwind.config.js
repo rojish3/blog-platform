@@ -5,9 +5,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        "primary-bg": "#eae7dc",
+        "primary-bg": "#F5F5F5",
+        "secondary-bg": "#ffffff",
         "primary-text": "#000000",
-        "darkMode-bg": "#121212",
+        "darkMode-bg": "#000000",
+        "secondary-darkMode-bg": "#171717",
         "darkMode-text": "#ffffff",
         "title-color": "#e85a4f",
       },

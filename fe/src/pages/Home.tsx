@@ -2,6 +2,7 @@ import BlogCard from "../components/BlogCard";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { blogData } from "../data/blogData";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -9,11 +10,13 @@ const Home = () => {
     (a: { date: any }, b: { date: any }) => b.date - a.date
   );
   const latestPosts = sortedData.slice(0, 3);
-  console.log(latestPosts);
+  // console.log(latestPosts);
   return (
     <>
       <div className="bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
-        <div className="h-screen relative bg-center background bg-no-repeat backdrop-brightness-50">
+        <div
+          className={`h-screen relative bg-center background bg-no-repeat backdrop-brightness-50 dark:backdrop-brightness-50`}
+        >
           <NavBar />
           <div className="flex flex-col justify-center items-center h-[70%] gap-4">
             <h1 className="text-3xl font-bold text-center">
@@ -38,16 +41,16 @@ const Home = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M1 5h12m0 0L9 1m4 4L9 9"
                 />
               </svg>
             </button>
           </div>
         </div>
-        <div className="h-screen p-4 md-p-8">
+        <div className="min-h-screen p-4 md-p-8">
           <h1 className="text-3xl title-font text-center my-12 underline">
             LATEST BLOGS
           </h1>
@@ -57,6 +60,7 @@ const Home = () => {
             ))}
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );
