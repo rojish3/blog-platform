@@ -109,7 +109,7 @@ const Login = () => {
             <button
               disabled={isSubmitting}
               type="submit"
-              className="px-4 min-w-[350px] mt-4 lg:mt-6 text-blue-700 hover:text-white border border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
+              className="px-4 min-w-[350px] mt-4 lg:mt-6 text-blue-700 hover:text-white border-2 border-blue-700 from-[#0F4C81] via-blue-800 to-blue-600 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm p-3 text-center mb-2 transition-all ease-in-out duration-300 disabled:bg-gray-600 disabled:text-white"
             >
               {isSubmitting ? "Logging In..." : "Log In"}
             </button>

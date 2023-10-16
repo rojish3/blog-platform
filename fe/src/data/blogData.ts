@@ -12,7 +12,8 @@ export const blogData = [
     title: "Capturing Stunning Landscapes",
     date: new Date("2023-09-15"),
     category: "Photography",
-    content: "Vivamus pretium dui auctor, maximus justo in, imperdiet...",
+    content:
+      "Vivamus pretium dui auctor, maximus justo in, imperdietkjsdahf sadkhflhdsaf kljasjdgfuys dfiusafbaslkf asifhglsk dfgi sagufs adgfuoysgafvkjasd fkajshdf  ...",
     author: "Jane Smith",
   },
   {

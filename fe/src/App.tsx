@@ -6,6 +6,8 @@ const App = () => {
   const Signup = lazy(() => import("./pages/Signup"));
   const Home = lazy(() => import("./pages/Home"));
   const Blogs = lazy(() => import("./pages/Blogs"));
+  const BlogPost = lazy(() => import("./pages/BlogPost"));
+  const CreatePost = lazy(() => import("./components/CreatePost"));
   return (
     <>
       <BrowserRouter>
@@ -39,6 +41,22 @@ const App = () => {
             element={
               <Suspense>
                 <Blogs />
+              </Suspense>
+            }
+          ></Route>
+          <Route
+            path="/single-blog"
+            element={
+              <Suspense>
+                <BlogPost />
+              </Suspense>
+            }
+          ></Route>
+          <Route
+            path="/new"
+            element={
+              <Suspense>
+                <CreatePost />
               </Suspense>
             }
           ></Route>
