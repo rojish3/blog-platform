@@ -1,13 +1,24 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
-import { FieldValues, useForm } from "react-hook-form";
-
+import { useForm } from "react-hook-form";
+// import axios from "axios";
 import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, TLoginSchema } from "../schema/loginSchema";
 import NavBar from "../components/NavBar";
 import RegisterImg from "../assets/register.png";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
+
+interface AppState {
+  theme: boolean;
+}
 
 const Login = () => {
+  const { mode }: any = useSelector((state: AppState) => state.theme);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const {
@@ -15,15 +26,41 @@ const Login = () => {
     handleSubmit,
     // reset,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<TLoginSchema>({ resolver: zodResolver(loginSchema) });
 
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const toastTheme = mode ? "dark" : "light";
+  const onSubmit = async (data: TLoginSchema) => {
+    try {
+      const userData = await axios.post(
+        "http://localhost:3000/api/users/login",
+        data
+      );
+      if (userData.status === 200) {
+        toast.success(userData.data.message, {
+          position: "top-left",
+          autoClose: 1000,
+          theme: toastTheme,
+        });
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 1000);
+      }
+      console.log(userData);
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        toast.error(error.response.data.message, {
+          position: "top-left",
+          autoClose: 1000,
+          theme: toastTheme,
+        });
+      }
+    }
   };
   return (
     <>
       <div className="h-screen bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
         <NavBar />
+
         <div className="flex justify-center gap-12 p-4 md:px-8">
           <div className="hidden md:block w-fit">
             <img
@@ -43,13 +80,7 @@ const Login = () => {
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
                 <input
-                  {...register("email", {
-                    required: "This field is required",
-                    pattern: {
-                      value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-                      message: "Invalid Email, please enter valid email",
-                    },
-                  })}
+                  {...register("email")}
                   className={classNames(
                     "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
                     { "border-red-500 focus:outline-red-500": errors.email }
@@ -67,18 +98,7 @@ const Login = () => {
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
                 <input
-                  {...register("password", {
-                    required: "This filed is required",
-                    pattern: {
-                      value: /^(?=.*[A-Z])(?=.*\d)(?=.*\W).*$/,
-                      message:
-                        "Password must contain a Uppercase letter, a number and a symbol",
-                    },
-                    minLength: {
-                      value: 8,
-                      message: "Passowrd must be atleast 8 characters",
-                    },
-                  })}
+                  {...register("password")}
                   type={showPassword ? "text" : "password"}
                   className={classNames(
                     "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
@@ -133,6 +153,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

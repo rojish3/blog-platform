@@ -1,51 +1,57 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema, TSignupSchema } from "../schema/signupSchema";
 import classNames from "classnames";
 import NavBar from "../components/NavBar";
 import RegisterImg from "../assets/register.png";
+import { useSelector } from "react-redux";
+interface AppState {
+  theme: boolean;
+}
+const Signup = () => {
+  const { mode }: any = useSelector((state: AppState) => state.theme);
 
-// const signupSchema = z.object({
-//   email: z.string().email(),
-//   password: z.string().min(8, "Password must be atleast 8 characters"),
-//   confirmPassword: z.string(),
-// }).refine(data => data.password == data.confirmPassword, {
-//   message: "Password did not match"
-// })
-
-const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     // reset,
-    getValues,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<TSignupSchema>({ resolver: zodResolver(signupSchema) });
+  const toastTheme = mode ? "dark" : "light";
 
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async (data: TSignupSchema) => {
     try {
-      console.log(data);
+      // console.log(data);
       const userData = await axios.post(
-        "http://localhost:3000/api/users",
+        "http://localhost:3000/api/users/register",
         data
       );
       if (userData.status === 200) {
-        toast.success(userData.data);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        toast.success(userData.data.message, {
+          position: "top-left",
+          autoClose: 1000,
+          theme: toastTheme,
+        });
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 1000);
       }
       console.log(userData);
     } catch (error: any) {
       if (error.response.status === 401) {
-        console.log(error);
+        toast.error(error.response.data.message, {
+          position: "top-left",
+          autoClose: 1000,
+          theme: toastTheme,
+        });
       }
     }
   };
@@ -67,88 +73,37 @@ const Login = () => {
           >
             <div>
               <label className="mt-2 text-sm font-medium text-inherit">
-                Full Name
+                Name
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
                 <input
-                  {...register("fullName", {
-                    required: "Name cannot be empty.",
-                    validate: (value) => {
-                      if (value.trim() === "") return "Name cannot be empty";
-                    },
-                  })}
+                  {...register("name")}
                   className={classNames(
                     "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
-                    { "border-red-500 focus:outline-red-500": errors.fullName }
+                    { "border-red-500 focus:outline-red-500": errors.name }
                   )}
                   placeholder="John Doe"
                 />
-                {errors.fullName && (
-                  <p className="text-sm text-red-600">{`${errors.fullName.message}`}</p>
+                {errors.name && (
+                  <p className="text-sm text-red-600">{`${errors.name.message}`}</p>
                 )}
               </div>
             </div>
             <div>
               <label className="mt-2 text-sm font-medium text-inherit">
-                Gender
+                Username
               </label>
-              <div className="flex flex-row items-start mb-2 gap-4 md:gap-8 w-full min-w-[350px]">
-                <div className="flex items-center">
-                  <input
-                    {...register("gender", {
-                      required: "required*",
-                    })}
-                    id="male-radio"
-                    type="radio"
-                    value="Male"
-                    name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 focus:ring-blue-500 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor="male-radio"
-                    className="ml-2 text-sm font-medium text-inherit"
-                  >
-                    Male
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    {...register("gender", {
-                      required: "required*",
-                    })}
-                    id="female-radio"
-                    type="radio"
-                    value="Female"
-                    name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 focus:ring-blue-500 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor="female-radio"
-                    className="ml-2 text-sm font-medium text-inherit"
-                  >
-                    Female
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    {...register("gender", {
-                      required: "required*",
-                    })}
-                    id="others-radio"
-                    type="radio"
-                    value="Others"
-                    name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 focus:ring-blue-500 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor="others-radio"
-                    className="ml-2 text-sm font-medium text-inherit"
-                  >
-                    Others
-                  </label>
-                </div>
-                {errors.gender && (
-                  <p className="text-sm text-red-600">{`${errors.gender.message}`}</p>
+              <div className="relative h-12 w-full min-w-[350px]">
+                <input
+                  {...register("userName")}
+                  className={classNames(
+                    "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
+                    { "border-red-500 focus:outline-red-500": errors.userName }
+                  )}
+                  placeholder="johndoe"
+                />
+                {errors.userName && (
+                  <p className="text-sm text-red-600">{`${errors.userName.message}`}</p>
                 )}
               </div>
             </div>
@@ -159,19 +114,7 @@ const Login = () => {
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
                 <input
-                  {...register("phoneNumber", {
-                    required: "Phone number cannot be empty",
-                    pattern: {
-                      value: /^9\d*$/,
-                      message: "Invalid phone number",
-                    },
-                    validate: (value) => {
-                      return (
-                        value.length === 10 ||
-                        "The phone number must be 10 character"
-                      );
-                    },
-                  })}
+                  {...register("phoneNumber")}
                   type="text"
                   className={classNames(
                     "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
@@ -180,7 +123,7 @@ const Login = () => {
                         errors.phoneNumber,
                     }
                   )}
-                  placeholder="98********"
+                  placeholder="9*********"
                 />
                 {errors.phoneNumber && (
                   <p className="text-sm text-red-600">{`${errors.phoneNumber.message}`}</p>
@@ -193,13 +136,7 @@ const Login = () => {
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
                 <input
-                  {...register("email", {
-                    required: "Email cannot be empty",
-                    pattern: {
-                      value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-                      message: "Invalid email",
-                    },
-                  })}
+                  {...register("email")}
                   className={classNames(
                     "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
                     { "border-red-500 focus:outline-red-500": errors.email }
@@ -259,19 +196,7 @@ const Login = () => {
               </label>
               <div className="relative h-12 w-full min-w-[350px]">
                 <input
-                  {...register("confirmPassword", {
-                    required: "Password cannot be empty",
-                    minLength: {
-                      value: 8,
-                      message: "Passowrd must be atleast 8 characters",
-                    },
-                    validate: (value) => {
-                      return (
-                        value === getValues("password") ||
-                        "Password did not match"
-                      );
-                    },
-                  })}
+                  {...register("confirmPassword")}
                   type={showPassword ? "text" : "password"}
                   className={classNames(
                     "bg-inherit border-2 focus:outline-blue-500 border-gray-500 text-inherit text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10",
@@ -345,4 +270,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
