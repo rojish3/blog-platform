@@ -1,63 +1,140 @@
-import mongoose, { Document } from "mongoose";
+import User from "../../Model/user.model";
+import bcrypt from "bcrypt";
+import { IUser } from "../../types/user.types";
 
-export interface UserDocument extends Document {
-  fullName: string;
-  gender: string;
-  email: string;
-  phoneNumber: number;
-  password: string;
-  profilePicture?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export const createUser = async (data: IUser) => {
+  try {
+    const { name, userName, phoneNumber, email, password } = data;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      throw new Error("User already exists");
+    } else {
+      const user = await User.create({
+        name,
+        userName,
+        phoneNumber,
+        email,
+        password,
+      });
+      if (user) {
+        return {
+          user,
+          message: "User created successfully",
+        };
+      }
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
-export interface IUser {
-  fullName: string;
-  gender: string;
-  email: string;
-  phoneNumber: number;
-  password: string;
-  profilePicture?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export const loginUser = async (data: any) => {
+  try {
+    const { email, password } = data;
+    const userInfo = await User.findOne({ email });
+    if (!userInfo) {
+      return { status: 401, message: "Invalid email or password" };
+    }
+    const hashedPass = await bcrypt.compare(password, userInfo.password);
+    if (!hashedPass) {
+      return { status: 401, message: "Invalid email or password" };
+    }
+    return {
+      status: 200,
+      data: userInfo,
+      message: "Login successful",
+    };
+  } catch (error) {
+    return { status: 500, message: "Internal server error" };
+  }
+};
 
-const userSchema = new mongoose.Schema<IUser>({
-  fullName: {
-    type: String,
-    required: [true, "Name cannot be empty"],
-  },
-  gender: {
-    type: String,
-    required: [true, "This field is required"],
-  },
-  phoneNumber: {
-    type: Number,
-    required: [true, "Phone number cannot be empty"],
-  },
-  email: {
-    type: String,
-    required: [true, "Email cannot be empty"],
-  },
-  password: {
-    type: String,
-    required: [true, "Password cannot be empty"],
-  },
-  profilePicture: {
-    type: String,
-    path: String,
-  },
-  createdAt: {
-    type: Date,
-    immutable: true,
-    default: () => Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    immutable: true,
-    default: () => Date.now(),
-  },
-});
+export const listAllUsers = async () => {
+  try {
+    const allUsers = User.find();
+    return allUsers;
+  } catch (error) {
+    return error;
+  }
+};
 
-const UserModel = mongoose.model<IUser>("user", userSchema);
-export default UserModel;
+export const updateUser = async (id: any, data: any) => {
+  try {
+    const user = await User.findById(id);
+    if (user) {
+      const { name, userName, phoneNumber, email } = user;
+      user.email = email;
+      user.name = data.name || name;
+      user.userName = data.userName || userName;
+      user.phoneNumber = data.phoneNumber || phoneNumber;
+      const updatedUser = await user.save();
+      return {
+        status: 200,
+        message: "Update successful",
+        data: updatedUser,
+      };
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+export const changePassword = async (id: any, data: any) => {
+  try {
+    const user = await User.findById(id);
+    const { oldPassword, password } = data;
+    console.log(data);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    if (!oldPassword || !password) {
+      throw new Error("Please enter password");
+    }
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (user && passwordMatch) {
+      user.password = password;
+      await user.save();
+      return {
+        status: 200,
+        message: "Password changed successfully",
+      };
+    } else {
+      return {
+        status: 404,
+        message: "Password incorrect",
+      };
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+export const forgotPassword = async (data: any) => {
+  try {
+    const { email } = data;
+    const userData = await User.findOne({ email });
+    if (!userData) {
+      throw new Error("User not found");
+    }
+    return userData;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPassword = async (token: any, password: string) => {
+  try {
+    const userData = await User.findById(token);
+    if (!userData) {
+      throw new Error("User Not found");
+    }
+    userData.password = password;
+    await userData.save();
+    return {
+      status: 200,
+      message: "Password reset successfully",
+    };
+  } catch (error) {
+    return error;
+  }
+};
