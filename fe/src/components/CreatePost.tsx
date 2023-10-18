@@ -1,15 +1,98 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import ImageUpload from "./ImageUpload";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
+
+interface AppState {
+  theme: boolean;
+}
 
 const CreatePost = () => {
+  const { mode }: any = useSelector((state: AppState) => state.theme);
   const [coverImage, setCoverImage] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigate = useNavigate();
+  const toastTheme = mode ? "dark" : "light";
+
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const file = event.target.files && event.target.files[0];
+
+    if (file) {
+      // Check if the uploaded file is an image
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setCoverImage(file);
+          setImagePreview(e.target?.result as string);
+          setLoading(false);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Handle the case when the uploaded file is not an image
+        setLoading(false);
+        alert("Please upload an image file.");
+      }
+    }
+  };
+  const createPost = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    // Validate the form data
+    if (!coverImage || !title || !content || !category) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+
+    const data = {
+      image: coverImage,
+      title: title,
+      content: content,
+      category: category,
+    };
+    // Now you can proceed to send data to the backend
+    try {
+      const postData = await axios.post(
+        "http://localhost:3000/api/posts",
+        data
+      );
+      if (postData.status === 200) {
+        toast.success(postData.data, {
+          position: "top-left",
+          autoClose: 1000,
+          theme: toastTheme,
+        });
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 1000);
+      }
+      console.log(postData);
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        toast.error(error.response.data.message, {
+          position: "top-left",
+          autoClose: 1000,
+          theme: toastTheme,
+        });
+      }
+    }
+    console.log(data);
+  };
+  const resetPost = () => {
+    setCoverImage(null);
+    setTitle("");
+    setContent("");
+    setCategory("");
+  };
 
   //Text editor module and formats
   const modules = {
@@ -41,15 +124,6 @@ const CreatePost = () => {
     "image",
   ];
 
-  const handleFileInput = (file: any) => {
-    console.log(file.name);
-    setCoverImage(file);
-    console.log(coverImage);
-  };
-  const createPost = (e) => {
-    e.preventDefault();
-    console.log(title, content);
-  };
   return (
     <>
       <div className="bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text w-full min-h-screen h-auto">
@@ -63,7 +137,35 @@ const CreatePost = () => {
         </div>
         <form onSubmit={createPost}>
           <div className="bg-secondary-bg dark:bg-secondary-darkMode-bg h-auto w-[90%] md:w-[70%] p-4 md:p-8 rounded-lg mx-auto flex flex-col gap-4">
-            <ImageUpload onFileSelect={handleFileInput} />
+            <div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+                name="image"
+                id="fileInput"
+              />
+              <label
+                htmlFor="fileInput"
+                className={`${
+                  loading
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-700"
+                } p-2 rounded-md text-white transition duration-300 ease-in-out`}
+              >
+                {loading ? "Uploading..." : "Add a cover image"}
+              </label>
+              {imagePreview && (
+                <div className="mt-4">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-w-full max-h-64"
+                  />
+                </div>
+              )}
+            </div>
             <textarea
               rows={2}
               placeholder="Enter blog title..."
@@ -80,11 +182,16 @@ const CreatePost = () => {
                 onChange={(newContent) => setContent(newContent)}
               />
             </div>
-            <select className="border rounded-md px-2 py-2 bg-inherit text-inherit">
+            <select
+              className="border rounded-md px-2 py-2 bg-inherit text-inherit"
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option>Select Category</option>
-              <option value="pending">Photography</option>
-              <option value="approved">Technology</option>
-              <option value="declined">Lifestyle</option>
+              <option value="Art and Design">Art and Design</option>
+              <option value="Business">Business</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="News">News</option>
+              <option value="Technology">Technology</option>
             </select>
           </div>
           <div className="flex justify-center items-center pt-4 pb-7 gap-8">
@@ -95,12 +202,17 @@ const CreatePost = () => {
             >
               Publish
             </button>
-            <button className="bg-red-500 hover:bg-red-700 py-3 px-6 rounded-md text-white transition duration-300 ease-in-out">
+            <button
+              type="button"
+              className="bg-red-500 hover:bg-red-700 py-3 px-6 rounded-md text-white transition duration-300 ease-in-out"
+              onClick={() => resetPost}
+            >
               Reset
             </button>
           </div>
         </form>
       </div>
+      <ToastContainer />
     </>
   );
 };

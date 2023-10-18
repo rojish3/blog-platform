@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import { set } from "zod";
 import SideBar from "./SideBar";
+import axios from "axios";
 
 interface AppState {
   theme: boolean;
@@ -15,6 +16,8 @@ interface AppState {
 const NavBar = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const darkModeToggle = document.getElementById("data-mode");
     if (mode) {
@@ -34,15 +37,21 @@ const NavBar = () => {
         setScrolled(false);
       }
     };
-
     // Attach the scroll event listener when the component mounts
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getLoginStatus = async () => {
+      const loginStatus = axios.get("localhost:3000/api/users/loggedin");
+      console.log(loginStatus);
+    };
+    getLoginStatus;
+  }, []);
+
   return (
     <>
       <nav
