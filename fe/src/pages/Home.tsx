@@ -10,12 +10,12 @@ const Home = () => {
     (a: { date: any }, b: { date: any }) => b.date - a.date
   );
   const latestPosts = sortedData.slice(0, 3);
-  // console.log(latestPosts);
+
   return (
     <>
       <div className="bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
         <div
-          className={`h-screen relative bg-center background bg-no-repeat backdrop-brightness-50 dark:backdrop-brightness-50`}
+          className={`h-screen bg-cover bg-center background bg-no-repeat backdrop-brightness-50 dark:backdrop-brightness-50`}
         >
           <NavBar />
           <div className="flex flex-col justify-center items-center h-[70%] gap-4">
@@ -50,11 +50,11 @@ const Home = () => {
             </button>
           </div>
         </div>
-        <div className="min-h-screen p-4 md-p-8">
+        <div className="min-h-screen p-4 md:p-8">
           <h1 className="text-3xl title-font text-center my-12 underline">
             LATEST BLOGS
           </h1>
-          <div className="flex flex-col gap-4 md:gap-8 md:flex-row">
+          <div className="flex flex-wrap">
             {latestPosts.map((post) => (
               <BlogCard key={post.id} blog={post} />
             ))}

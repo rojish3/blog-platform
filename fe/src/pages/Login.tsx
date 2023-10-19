@@ -41,6 +41,11 @@ const Login = () => {
           autoClose: 1000,
           theme: toastTheme,
         });
+        document.cookie = `token=${
+          userData.data.token
+        }; path=/; expires=${new Date(
+          Date.now() + 1000 * 86400
+        ).toUTCString()};`;
         // setTimeout(() => {
         //   navigate("/");
         // }, 1000);

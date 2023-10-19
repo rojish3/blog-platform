@@ -1,15 +1,9 @@
 import { Link } from "react-router-dom";
 import BlogCardSkeleton from "./BlogCardSkeleton";
+import { IBlog } from "../types/post.types";
 
 // import { blogData } from "../data/blogData";
-interface IBlog {
-  id: number;
-  title: string;
-  date: Date;
-  category: string;
-  content: string;
-  author: string;
-}
+
 const BlogCard: React.FC<{ blog: IBlog }> = ({ blog }) => {
   // console.log(blog);
   const monthNames = [
@@ -31,21 +25,22 @@ const BlogCard: React.FC<{ blog: IBlog }> = ({ blog }) => {
   const year = blog.date.getFullYear();
   return (
     <>
-      {/* <BlogCardSkeleton /> */}
+      {/* <BlogCardSkeleto /> */}
 
-      <div className="relative max-w-sm h-[550px] bg-white border border-gray-200 rounded-lg shadow dark:bg-secondary-darkMode-bg dark:border-gray-700 m-auto my-4 md:my-8 hover:bg-secondary-bg dark:hover:bg-darkMode-bg transition-all duration-300 ease-in-out">
-        <a href="#">
-          <img
-            className="h-1/2 w-full object-cover rounded-t-lg"
-            src="https://static-01.daraz.com.np/p/d6271a012276f7ba4fee8d904e0745d6.jpg_300x0q75.webp"
-            alt=""
-          />
-        </a>
+      <div className="relative max-w-sm h-[500px] bg-white border border-gray-200 rounded-lg shadow dark:bg-secondary-darkMode-bg dark:border-gray-700 m-auto my-4 md:my-8 hover:bg-secondary-bg dark:hover:bg-darkMode-bg transition-all duration-300 ease-in-out">
+        <img
+          className="h-2/5 w-full object-cover rounded-t-lg"
+          src="https://static-01.daraz.com.np/p/d6271a012276f7ba4fee8d904e0745d6.jpg_300x0q75.webp"
+          alt=""
+        />
+
         <div className="p-5">
-          <span className="content-font font-thin">{blog.category}</span>
+          <span className="content-font font-thin text-gray-700 dark:text-gray-400">
+            {blog.category}
+          </span>
           <a href="#">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {blog.title.substring(0, 60)}
+              {blog.title.slice(0, 60)}
             </h5>
           </a>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">

@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 import * as UserServices from "../Service";
 import { IUser } from "../../types/user.types";
-interface IResponse {
-  status: number;
-  message: string;
-  data?: any; // Update this to the actual type of the 'data' property
-}
+import { IResponse } from "../../types/response.types";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -20,11 +16,11 @@ export const loginUser = async (req: Request, res: Response) => {
     const { status, token, message } = await UserServices.loginUser({
       ...req.body,
     });
-    res.cookie("token", token, {
+    res.cookie("token", token as string, {
       path: "/",
       httpOnly: true,
       expires: new Date(Date.now() + 1000 * 86400),
-      sameSite: "none",
+      sameSite: "strict",
       secure: true,
     });
     res.status(status).json({ message, token });
@@ -56,7 +52,7 @@ export const listUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getSingleUserData = async (req: Request, res: Response) => {
+export const getLoggedInUserData = async (req: Request, res: Response) => {
   try {
     const user = res.locals.user;
     console.log(user);

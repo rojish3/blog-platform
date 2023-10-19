@@ -1,9 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, FormEvent } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
@@ -14,11 +14,11 @@ interface AppState {
 
 const CreatePost = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
-  const [coverImage, setCoverImage] = useState(null);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigate = useNavigate();
   const toastTheme = mode ? "dark" : "light";
@@ -44,7 +44,8 @@ const CreatePost = () => {
       }
     }
   };
-  const createPost = async (e: { preventDefault: () => void }) => {
+
+  const createPost = async (e: FormEvent) => {
     e.preventDefault();
 
     // Validate the form data
@@ -53,29 +54,30 @@ const CreatePost = () => {
       return;
     }
 
-    const data = {
-      image: coverImage,
-      title: title,
-      content: content,
-      category: category,
-    };
-    // Now you can proceed to send data to the backend
     try {
-      const postData = await axios.post(
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("category", category);
+      formData.append("image", coverImage);
+
+      const postData: AxiosResponse = await axios.post(
         "http://localhost:3000/api/posts",
-        data
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-      if (postData.status === 200) {
-        toast.success(postData.data, {
+
+      if (postData.status === 201) {
+        toast.success(postData.data.message, {
           position: "top-left",
           autoClose: 1000,
           theme: toastTheme,
         });
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 1000);
       }
-      console.log(postData);
     } catch (error: any) {
       if (error.response.status === 401) {
         toast.error(error.response.data.message, {
@@ -85,8 +87,8 @@ const CreatePost = () => {
         });
       }
     }
-    console.log(data);
   };
+
   const resetPost = () => {
     setCoverImage(null);
     setTitle("");
@@ -94,7 +96,7 @@ const CreatePost = () => {
     setCategory("");
   };
 
-  //Text editor module and formats
+  // Text editor module and formats
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -203,9 +205,9 @@ const CreatePost = () => {
               Publish
             </button>
             <button
-              type="button"
+              type="reset"
               className="bg-red-500 hover:bg-red-700 py-3 px-6 rounded-md text-white transition duration-300 ease-in-out"
-              onClick={() => resetPost}
+              onClick={resetPost}
             >
               Reset
             </button>

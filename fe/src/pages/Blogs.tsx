@@ -2,8 +2,14 @@ import NavBar from "../components/NavBar";
 import BlogCard from "../components/BlogCard";
 import { blogData } from "../data/blogData";
 import Footer from "../components/Footer";
+import BlogList from "../components/BlogList";
+import { BsFillGridFill } from "react-icons/bs";
+import { FaList } from "react-icons/fa";
+import { useState } from "react";
+import BlogCardSkeleton from "../components/BlogCardSkeleton";
 
 const Blogs = () => {
+  const [itemView, setItemView] = useState<boolean>(true);
   return (
     <>
       <div className="bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text w-full">
@@ -16,7 +22,25 @@ const Blogs = () => {
           </p>
         </div>
         <div className="filter flex md:justify-between flex-col-reverse md:flex-row items-center p-4 md:p-8">
-          <div></div>
+          <div className="flex items-center gap-2 md:gap-4 text-xl md:text-2xl bg-secondary-bg dark:bg-secondary-darkMode-bg py-1 px-2 rounded-md">
+            <span
+              className={`p-2 cursor-pointer rounded-md hover:scale-105 ${
+                itemView ? "bg-gray-300 dark:bg-gray-600" : ""
+              }`}
+              onClick={() => setItemView(true)}
+            >
+              <BsFillGridFill />
+            </span>
+            {"|"}
+            <span
+              className={`p-2 cursor-pointer rounded-md hover:scale-105 ${
+                !itemView ? "bg-gray-300 dark:bg-gray-600" : ""
+              }`}
+              onClick={() => setItemView(false)}
+            >
+              <FaList />
+            </span>
+          </div>
           <ul className="w-full categories flex overflow-x-auto md:overflow-x-visible justify-center items-center gap-4 text-sm md:text-base">
             <li className="cursor-pointer hover:font-semibold hover:bg-white hover:dark:bg-gray-700 px-2 py-1 rounded-full">
               Discover
@@ -47,10 +71,14 @@ const Blogs = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap">
-          {blogData.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))}
+        <div className="flex flex-wrap p-4 md:p-8">
+          {blogData.map((blog) =>
+            itemView ? (
+              <BlogCard key={blog.id} blog={blog} />
+            ) : (
+              <BlogList key={blog.id} blog={blog} />
+            )
+          )}
         </div>
 
         <div>

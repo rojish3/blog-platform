@@ -3,9 +3,12 @@ import Post from "../../Model/post.model";
 
 export const createPost = async (post: IPost) => {
   try {
-    console.log(post);
     const newPost = Post.create(post);
-    return "Post created successfully";
+    return {
+      status: 201,
+      message: "Post created successfully",
+      data: newPost,
+    };
   } catch (error) {
     return error;
   }

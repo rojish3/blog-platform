@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import * as PostService from "../Service";
-
+import { IResponse } from "../../types/response.types";
 export const createPost = async (req: Request, res: Response) => {
   try {
     const image = req.file?.filename;
-    console.log(req.body, image);
-    res.status(200).json(await PostService.createPost({ ...req.body, image }));
+    const { status, message, data } = (await PostService.createPost({
+      ...req.body,
+      image,
+    })) as IResponse;
+    res.status(status).json({ message, data });
   } catch (error) {
     res.status(400).json(error);
   }

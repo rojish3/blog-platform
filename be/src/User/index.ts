@@ -21,7 +21,7 @@ const routes = () => {
     UserController.loginUser
   );
   router.get("/logout", UserController.logoutUser);
-  router.get("/getuser", verifyToken, UserController.getSingleUserData);
+  router.get("/getuser", verifyToken, UserController.getLoggedInUserData);
   router.get("/loggedin", UserController.loginStatus);
   // router.get("/:id", UserController.loginStatus);
   router.patch("/", verifyToken, UserController.updateUser);

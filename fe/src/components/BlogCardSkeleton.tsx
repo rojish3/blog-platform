@@ -5,7 +5,7 @@ const BlogCardSkeleton = () => {
         role="status"
         className="h-full max-w-sm p-4 border border-gray-200 rounded shadow animate-pulse md:p-4 dark:border-gray-700"
       >
-        <div className="h-1/2 flex items-center justify-center mb-4 bg-gray-300 rounded dark:bg-gray-700">
+        <div className="h-2/5 flex items-center justify-center mb-4 bg-gray-300 rounded dark:bg-gray-700">
           <svg
             className="w-10 h-10 text-gray-200 dark:text-gray-600"
             aria-hidden="true"

@@ -3,6 +3,7 @@ const postSchema = new mongoose.Schema(
   {
     image: {
       type: String,
+      required: [true, "Image cannot be empty"],
     },
     title: {
       type: String,
