@@ -1,8 +1,19 @@
 export interface IBlog {
-  id: number;
+  filter(arg0: (post: IBlog) => boolean): IBlog | null;
+  _id: string;
+  image: string;
   title: string;
-  date: Date;
   category: string;
   content: string;
-  author: string;
+  userId: IUserId;
+  userName: string;
+  views: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface IUserId {
+  _id: string;
+  userName: string;
+  profilePicture: string;
 }

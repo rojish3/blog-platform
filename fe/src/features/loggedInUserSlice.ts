@@ -1,43 +1,41 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
-import { IUser } from "../types/user.types";
+import { createSlice } from "@reduxjs/toolkit";
 
-interface UserState {
-  user: IUser | null;
-  loading: boolean;
-  error: string;
-}
-
-export const fetchUser = createAsyncThunk<IUser>("user/fetchUser", async () => {
-  const response: AxiosResponse<IUser> = await axios.get(
-    "http://localhost:3000/api/users/getuser"
-  );
-  return response.data;
-});
-
-const userSlice = createSlice({
-  name: "user",
-  initialState: {
-    user: null,
-    loading: false,
-    error: "",
-  } as UserState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUser.pending, (state) => {
-        state.loading = true;
-        state.error = "";
-      })
-      .addCase(fetchUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload;
-      })
-      .addCase(fetchUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+const loggedInUserSlice = createSlice({
+  name: "loggedInUser",
+  initialState: null,
+  reducers: {
+    setUser: (state, action) => {
+      return action.payload;
+    },
   },
 });
 
-export default userSlice.reducer;
+export const { setUser } = loggedInUserSlice.actions;
+export default loggedInUserSlice.reducer;
+
+// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+// import { IUser } from "../types/user.types";
+
+// interface LoggedInUserState {
+//   user: IUser | null; // user can be of type User or null
+// }
+
+// const initialState: LoggedInUserState = {
+//   user: null,
+// };
+
+// const loggedInUserSlice = createSlice({
+//   name: "loggedInUser",
+//   initialState,
+//   reducers: {
+//     setUser: (state, action: PayloadAction<IUser>) => {
+//       state.user = action.payload;
+//     },
+//     clearUser: (state) => {
+//       state.user = null;
+//     },
+//   },
+// });
+
+// export const { setUser, clearUser } = loggedInUserSlice.actions;
+// export default loggedInUserSlice.reducer;

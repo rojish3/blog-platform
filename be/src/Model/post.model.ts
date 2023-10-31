@@ -17,6 +17,16 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: [true, "Category cannot be empty"],
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+    userName: {
+      type: String,
+      required: true,
+    },
+    views: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

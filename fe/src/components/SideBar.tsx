@@ -43,18 +43,18 @@ const SideBar: React.FC<ISidebar> = ({ showSidebar, setShowSidebar }) => {
                 </NavLink>
               </li>
               <li className="my-8 uppercase">
-                {/* <NavLink
-                  to="/"
+                <NavLink
+                  to="/aboutus"
                   className={({ isActive }) =>
                     isActive
                       ? "text-blue-700 underline rounded-lg font-bold transition-all duration-200 ease-in-out"
                       : "hover:text-blue-600 font-semibold"
                   }
-                > */}
-                ABOUT US
-                {/* </NavLink> */}
+                >
+                  ABOUT US
+                </NavLink>
               </li>
-              <NavLink
+              {/* <NavLink
                 to="/login"
                 className={({ isActive }) =>
                   isActive
@@ -68,7 +68,7 @@ const SideBar: React.FC<ISidebar> = ({ showSidebar, setShowSidebar }) => {
                 >
                   Log in
                 </button>
-              </NavLink>
+              </NavLink> */}
             </ul>
           </div>
         </div>

@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: [true, "Username cannot be empty"],
       match: [/^[a-z0-9_.]+$/, "Invalid username"],
+      unique: true,
     },
     phoneNumber: {
       type: Number,
@@ -31,7 +32,8 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     profilePicture: {
       type: String,
-      path: String,
+      default:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
   },
   { timestamps: true }

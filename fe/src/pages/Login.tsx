@@ -8,19 +8,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "../schema/loginSchema";
 import NavBar from "../components/NavBar";
 import RegisterImg from "../assets/register.png";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Cookies from "universal-cookie";
+import { setUser } from "../features/loggedInUserSlice";
+import ForgetPasswordModal from "../components/ForgetPasswordModal";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:3000");
 
 interface AppState {
   theme: boolean;
 }
 
 const Login = () => {
-  const { mode }: any = useSelector((state: AppState) => state.theme);
+  const mode: boolean = useSelector((state: AppState) => state.theme);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const cookies = new Cookies(null, { path: "/" });
   const {
     register,
     handleSubmit,
@@ -36,31 +45,52 @@ const Login = () => {
         data
       );
       if (userData.status === 200) {
+        const token = await userData.data.token;
+        cookies.set("token", token);
+
+        // Fetch the user data after a successful login
+        const userResponse = await axios.get(
+          "http://localhost:3000/api/users/getuser",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const user = userResponse.data;
+        socket.emit("user", user.userName);
+        // console.log(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        const loggedInUserInfoString = localStorage.getItem("user");
+        const loggedInUserInfo = loggedInUserInfoString
+          ? JSON.parse(loggedInUserInfoString)
+          : null;
+        // console.log(loggedInUserInfo);
+        // Dispatch the user data to the Redux store
+        dispatch(setUser(loggedInUserInfo));
+
         toast.success(userData.data.message, {
           position: "top-left",
           autoClose: 1000,
           theme: toastTheme,
         });
-        document.cookie = `token=${
-          userData.data.token
-        }; path=/; expires=${new Date(
-          Date.now() + 1000 * 86400
-        ).toUTCString()};`;
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 1000);
+
+        navigate("/");
       }
-      console.log(userData);
-    } catch (error: any) {
-      if (error.response.status === 401) {
-        toast.error(error.response.data.message, {
-          position: "top-left",
-          autoClose: 1000,
-          theme: toastTheme,
-        });
+    } catch (error: Error) {
+      const errors = error as Error | AxiosError;
+      if (!axios.isAxiosError(errors)) {
+        if (error.response.status === 401 || error.status === 400) {
+          toast.error(error.response.data.message, {
+            position: "top-left",
+            autoClose: 1000,
+            theme: toastTheme,
+          });
+        }
       }
     }
   };
+
   return (
     <>
       <div className="h-screen bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
@@ -141,7 +171,7 @@ const Login = () => {
             <div className="flex flex-col items-center gap-1">
               <a
                 className="py-2 text-gray-600 cursor-pointer hover:underline"
-                // onClick={() => setShowModal(true)}
+                onClick={() => setShowModal(true)}
               >
                 Forgot your password?
               </a>
@@ -158,7 +188,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
+      <ForgetPasswordModal showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 };

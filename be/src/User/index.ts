@@ -12,6 +12,7 @@ const routes = () => {
   router.get("/", verifyToken, UserController.listUser);
   router.post(
     "/register",
+    upload.single("profilePicture"),
     validateUserData(signupSchema),
     UserController.createUser
   );
@@ -24,7 +25,12 @@ const routes = () => {
   router.get("/getuser", verifyToken, UserController.getLoggedInUserData);
   router.get("/loggedin", UserController.loginStatus);
   // router.get("/:id", UserController.loginStatus);
-  router.patch("/", verifyToken, UserController.updateUser);
+  router.patch(
+    "/",
+    verifyToken,
+    upload.single("profilePicture"),
+    UserController.updateUser
+  );
   router.patch("/change-password", verifyToken, UserController.changePassword);
   router.post("/forgot-password", UserController.forgotPassword);
   router.post("/reset-password", UserController.resetPassword);

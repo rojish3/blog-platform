@@ -61,9 +61,9 @@ export const listUsers = async () => {
   }
 };
 
-export const updateUser = async (id: any, data: any) => {
+export const updateUser = async (data: any) => {
   try {
-    const updatedUser = await UserRepository.updateUser(id, data);
+    const updatedUser = await UserRepository.updateUser(data);
     return updatedUser;
   } catch (error) {
     return error;

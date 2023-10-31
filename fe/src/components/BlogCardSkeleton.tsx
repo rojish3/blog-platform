@@ -1,6 +1,6 @@
 const BlogCardSkeleton = () => {
   return (
-    <div className="relative h-[550px] w-full max-w-[22rem] lg:h-[550px] lg:max-w-[24rem] mt-8 m-auto p-2 cursor-pointer rounded-lg transition-all duration-300 ease-in-out">
+    <div className="relative max-w-sm h-[450px] w-[350px] m-auto my-4 md:my-4 cursor-pointer rounded-lg transition-all duration-300 ease-in-out">
       <div
         role="status"
         className="h-full max-w-sm p-4 border border-gray-200 rounded shadow animate-pulse md:p-4 dark:border-gray-700"

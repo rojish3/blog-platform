@@ -4,7 +4,9 @@ import { IUser } from "../../types/user.types";
 
 export const createUser = async (data: IUser) => {
   try {
-    const { name, userName, phoneNumber, email, password } = data;
+    const { name, userName, phoneNumber, email, password, profilePicture } =
+      data;
+    console.log(profilePicture);
     const userExists = await User.findOne({ email });
     if (userExists) {
       throw new Error("User already exists");
@@ -15,11 +17,12 @@ export const createUser = async (data: IUser) => {
         phoneNumber,
         email,
         password,
+        profilePicture,
       });
       if (user) {
         return {
           user,
-          message: "User created successfully",
+          message: "Signup successful",
         };
       }
     }
@@ -58,15 +61,16 @@ export const listAllUsers = async () => {
   }
 };
 
-export const updateUser = async (id: any, data: any) => {
+export const updateUser = async (data: any) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(data.id);
     if (user) {
-      const { name, userName, phoneNumber, email } = user;
+      const { name, userName, phoneNumber, email, profilePicture } = user;
       user.email = email;
       user.name = data.name || name;
       user.userName = data.userName || userName;
       user.phoneNumber = data.phoneNumber || phoneNumber;
+      user.profilePicture = data.profilePicture || profilePicture;
       const updatedUser = await user.save();
       return {
         status: 200,
@@ -100,7 +104,7 @@ export const changePassword = async (id: any, data: any) => {
       };
     } else {
       return {
-        status: 404,
+        status: 400,
         message: "Password incorrect",
       };
     }

@@ -16,37 +16,56 @@ interface AppState {
 }
 const Signup = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
-
+  const toastTheme = mode ? "dark" : "light";
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    // reset,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<TSignupSchema>({ resolver: zodResolver(signupSchema) });
-  const toastTheme = mode ? "dark" : "light";
 
   const onSubmit = async (data: TSignupSchema) => {
     try {
-      // console.log(data);
-      const userData = await axios.post(
-        "http://localhost:3000/api/users/register",
-        data
-      );
-      if (userData.status === 200) {
-        toast.success(userData.data.message, {
-          position: "top-left",
-          autoClose: 1000,
-          theme: toastTheme,
-        });
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 1000);
+      if (data) {
+        // Set up the FormData
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("userName", data.userName);
+        formData.append("phoneNumber", data.phoneNumber);
+        formData.append("email", data.email);
+        formData.append("password", data.password);
+        formData.append("confirmPassword", data.confirmPassword);
+
+        // Check if profileImage is set
+        if (profileImage) {
+          formData.append("profilePicture", profileImage);
+        }
+        // Submit the form data
+        const userData = await axios.post(
+          "http://localhost:3000/api/users/register",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(userData);
+        if (userData.status === 200) {
+          toast.success(userData.data.message, {
+            position: "top-left",
+            autoClose: 1000,
+            theme: toastTheme,
+          });
+          reset();
+        }
       }
-      console.log(userData);
     } catch (error: any) {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         toast.error(error.response.data.message, {
           position: "top-left",
           autoClose: 1000,
@@ -55,6 +74,7 @@ const Signup = () => {
       }
     }
   };
+
   return (
     <>
       <div className="h-screen bg-primary-bg text-primary-text dark:bg-darkMode-bg dark:text-darkMode-text">
@@ -222,14 +242,16 @@ const Signup = () => {
                 <p className="text-sm text-red-600">{`${errors.confirmPassword.message}`}</p>
               )}
             </div>
-            {/* <div>
+            <div>
               <label className="mt-2 text-sm font-medium text-inherit">
                 Profile Picture
               </label>
               <div className="h-12 w-full min-w-[350px]">
                 <input
-                  {...register("profilePicture")}
                   type="file"
+                  name="profilePicture"
+                  accept=".jpg, .jpeg, .png, .gif, .webp"
+                  onChange={(e) => setProfileImage(e.target.files[0])}
                   className={classNames({
                     // button colors
                     "file:bg-blue-50 file:dark:bg-blue-400 file:dark:text-blue-50 file:text-blue-500 hover:file:bg-blue-100":
@@ -244,7 +266,7 @@ const Signup = () => {
                   })}
                 />
               </div>
-            </div> */}
+            </div>
 
             <button
               disabled={isSubmitting}

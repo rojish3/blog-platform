@@ -4,16 +4,11 @@ import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios, { AxiosResponse } from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
-
-interface AppState {
-  theme: boolean;
-}
+import Cookies from "universal-cookie";
 
 const CreatePost = () => {
-  const { mode }: any = useSelector((state: AppState) => state.theme);
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -21,7 +16,9 @@ const CreatePost = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigate = useNavigate();
-  const toastTheme = mode ? "dark" : "light";
+  const cookies = new Cookies();
+  const token = cookies.get("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -45,22 +42,28 @@ const CreatePost = () => {
     }
   };
 
+  const resetPost = () => {
+    setImagePreview(null);
+    setCoverImage(null);
+    setTitle("");
+    setContent("");
+    setCategory("");
+  };
+
   const createPost = async (e: FormEvent) => {
     e.preventDefault();
-
     // Validate the form data
     if (!coverImage || !title || !content || !category) {
       alert("Please fill in all the required fields.");
       return;
     }
-
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("content", content);
       formData.append("category", category);
       formData.append("image", coverImage);
-
+      console.log(formData);
       const postData: AxiosResponse = await axios.post(
         "http://localhost:3000/api/posts",
         formData,
@@ -72,28 +75,17 @@ const CreatePost = () => {
       );
 
       if (postData.status === 201) {
-        toast.success(postData.data.message, {
-          position: "top-left",
-          autoClose: 1000,
-          theme: toastTheme,
-        });
+        toast.success(postData.data.message);
+        // resetPost();
+        setTimeout(() => {
+          navigate("/blogs");
+        }, 500);
       }
     } catch (error: any) {
       if (error.response.status === 401) {
-        toast.error(error.response.data.message, {
-          position: "top-left",
-          autoClose: 1000,
-          theme: toastTheme,
-        });
+        toast.error(error.response.data.message);
       }
     }
-  };
-
-  const resetPost = () => {
-    setCoverImage(null);
-    setTitle("");
-    setContent("");
-    setCategory("");
   };
 
   // Text editor module and formats
@@ -138,7 +130,7 @@ const CreatePost = () => {
           </div>
         </div>
         <form onSubmit={createPost}>
-          <div className="bg-secondary-bg dark:bg-secondary-darkMode-bg h-auto w-[90%] md:w-[70%] p-4 md:p-8 rounded-lg mx-auto flex flex-col gap-4">
+          <div className="bg-secondary-bg dark:bg-secondary-darkMode-bg text-inherit h-auto w-[90%] md:w-[70%] p-4 md:p-8 rounded-lg mx-auto flex flex-col gap-4">
             <div>
               <input
                 type="file"
@@ -172,7 +164,7 @@ const CreatePost = () => {
               rows={2}
               placeholder="Enter blog title..."
               className="bg-inherit text-inherit outline-none font-bold text-4xl resize-none w-full title-font py-2"
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value.trim())}
             ></textarea>
             <div className="">
               <ReactQuill
@@ -181,18 +173,21 @@ const CreatePost = () => {
                 value={content}
                 modules={modules}
                 formats={formats}
-                onChange={(newContent) => setContent(newContent)}
+                onChange={(newContent) => setContent(newContent.trim())}
               />
             </div>
             <select
               className="border rounded-md px-2 py-2 bg-inherit text-inherit"
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option>Select Category</option>
-              <option value="Art and Design">Art and Design</option>
-              <option value="Business">Business</option>
-              <option value="Lifestyle">Lifestyle</option>
-              <option value="News">News</option>
+              <option value="">Select Category</option>
+              <option value="Artificial Intelligence">
+                Artificial Intelligence
+              </option>
+              <option value="Cloud Computing">Cloud Computing</option>
+              <option value="Cybersecurity">Cybersecurity</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+              <option value="Programming">Programming</option>
               <option value="Technology">Technology</option>
             </select>
           </div>
@@ -214,7 +209,6 @@ const CreatePost = () => {
           </div>
         </form>
       </div>
-      <ToastContainer />
     </>
   );
 };

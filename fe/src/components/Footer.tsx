@@ -6,7 +6,7 @@ import {
 
 const Footer = () => {
   return (
-    <div className="bg-secondary-bg dark:bg-secondary-darkMode-bg px-4 py-4 pb-16 mb:px-12 mb:pb-12 mt-4 md:pt-8">
+    <div className="bg-secondary-bg dark:bg-secondary-darkMode-bg px-4 py-4 pb-16 mb:px-12 mb:pb-12 md:pt-8">
       <div className="lg:flex flex-row justify-between items-center">
         <div className="socials text-xl flex gap-3 py-4 lg cursor-pointer">
           <AiFillFacebook />
@@ -19,9 +19,6 @@ const Footer = () => {
           </a>
           <a href="#" className="hover:underline">
             Terms
-          </a>
-          <a href="#" className="hover:underline">
-            Pricing
           </a>
           <a href="#" className="hover:underline">
             Do not sell of share my personal information
@@ -40,7 +37,7 @@ const Footer = () => {
           </a>{" "}
           apply.
         </p>
-        <p>&copy; 2023 Bloghub</p>
+        <p>&copy; 2023 TechVerse</p>
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ export const signupSchema = z.object({
       message: "Password did not match",
       path: ["confirmPassword"],
     }),
+  profilePicture: z.any(),
 });
 
 export type TSignupSchema = z.infer<typeof signupSchema>;

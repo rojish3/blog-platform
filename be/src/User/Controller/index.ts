@@ -5,7 +5,10 @@ import { IResponse } from "../../types/response.types";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    res.status(200).json(await UserServices.createUser({ ...req.body }));
+    const profilePicture = req.file?.filename;
+    res
+      .status(200)
+      .json(await UserServices.createUser({ ...req.body, profilePicture }));
   } catch (error) {
     res.status(400).json(error);
   }
@@ -55,7 +58,6 @@ export const listUser = async (req: Request, res: Response) => {
 export const getLoggedInUserData = async (req: Request, res: Response) => {
   try {
     const user = res.locals.user;
-    console.log(user);
     res.send(user);
   } catch (error) {
     res.status(400).json(error);
@@ -79,10 +81,14 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
+    const profilePicture = req.file?.filename;
     const user = res.locals.user;
     const id = user.id;
-    const response = (await UserServices.updateUser(id, {
+    const response = (await UserServices.updateUser({
+      id,
+      user,
       ...req.body,
+      profilePicture,
     })) as IResponse;
     res
       .status(response.status)
@@ -99,7 +105,7 @@ export const changePassword = async (req: Request, res: Response) => {
     const response = (await UserServices.changePassword(id, {
       ...req.body,
     })) as IResponse;
-    res.status(200).json(response.message);
+    res.status(response.status).json(response.message);
   } catch (error) {
     res.status(400).json(error);
   }
