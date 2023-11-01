@@ -144,6 +144,7 @@ const BlogPost: React.FC = () => {
         data
       );
       if (comments.status === 201) {
+        socket.emit("new-comment", user?.userName, postData?.userName);
         setComment(""); // Clear the comment input field
         const newComment = comments.data.data;
         setCommentData((prevCommentData) => {
@@ -196,7 +197,7 @@ const BlogPost: React.FC = () => {
             <div className="h-8 w-8 bg-black rounded-full animate-bounce"></div>
           </div>
         ) : postData ? (
-          <div className="relative h-auto w-[90%] md:w-[50%] rounded-lg mx-auto bg-secondary-bg dark:bg-secondary-darkMode-bg shadow my-4">
+          <div className="relative h-auto w-[90%] md:w-[70%] lg:[50%] rounded-lg mx-auto bg-secondary-bg dark:bg-secondary-darkMode-bg shadow my-4">
             <img
               src={`http://localhost:3000/api/images/${postData.image}`}
               alt="cover image"

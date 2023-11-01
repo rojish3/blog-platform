@@ -169,7 +169,7 @@ const CreatePost = () => {
             <div className="">
               <ReactQuill
                 placeholder="Enter blog content..."
-                className="outline-none min-h-[22rem]"
+                className="outline-none min-h-[12rem]"
                 value={content}
                 modules={modules}
                 formats={formats}

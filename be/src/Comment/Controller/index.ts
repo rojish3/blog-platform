@@ -6,7 +6,7 @@ export const createComment = async (req: Request, res: Response) => {
   try {
     const user = res.locals.user;
     const userId = user.id;
-    console.log(userId);
+    // console.log(userId);
     const userName = user.userName;
     const profilePicture = user.profilePicture;
     const { status, message, data } = (await CommentService.createComment({
@@ -47,6 +47,17 @@ export const getCommentCount = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
     res.status(200).json(await CommentService.getCommentCount(postId));
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const getCommentByUser = async (req: Request, res: Response) => {
+  try {
+    const user = res.locals.user;
+    // console.log(user);
+    const userId = user.id;
+    res.status(200).json(await CommentService.getCommentByUser(userId));
   } catch (error) {
     res.status(400).json(error);
   }

@@ -9,8 +9,8 @@ import UserProfile from "./pages/UserProfile";
 import Error from "./pages/Error";
 import axios from "axios";
 import ChangePassword from "./components/ChangePassword";
-import { io } from "socket.io-client";
-const socket = io("http://localhost:3000");
+import { Socket, io } from "socket.io-client";
+import { setNotifications } from "./features/notificationSlice";
 
 interface AppState {
   theme: boolean;
@@ -19,7 +19,7 @@ interface AppState {
 const App = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
   const toastTheme = mode ? "dark" : "light";
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [socketConnection, setSocketConnection] = useState<Socket | null>();
   const Login = lazy(() => import("./pages/Login"));
   const Signup = lazy(() => import("./pages/Signup"));
   const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -37,52 +37,60 @@ const App = () => {
   );
 
   useEffect(() => {
+    const socket = io("http://localhost:3000");
+    setSocketConnection(socket);
     socket.on("new-like", (notification) => {
-      setNotifications((prevNotifications) => {
-        return prevNotifications
-          ? [notification, ...prevNotifications]
-          : [notification];
-      });
+      if (notification) {
+        console.log(notification, "App");
+        dispatch(setNotifications(notification));
+      }
     });
-    console.log(notifications);
+    socket.on("new-comment", (notification) => {
+      if (notification) {
+        // console.log(notification, "App");
+        dispatch(setNotifications(notification));
+      }
+    });
 
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     // Fetch user data from local storage
-    const getUserData = async () => {
-      try {
-        const userResponse = await axios.get(
-          "http://localhost:3000/api/users/getuser",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (userResponse.status == 200) {
-          const user = userResponse.data;
-          socket.emit("user", user.userName);
-          // console.log(user);
-          localStorage.setItem("user", JSON.stringify(user));
-          const loggedInUserInfoString = localStorage.getItem("user");
-          const loggedInUserInfo = loggedInUserInfoString
-            ? JSON.parse(loggedInUserInfoString)
-            : null;
+    if (socketConnection) {
+      const getUserData = async () => {
+        try {
+          const userResponse = await axios.get(
+            "http://localhost:3000/api/users/getuser",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (userResponse.status == 200) {
+            const user = userResponse.data;
+            socketConnection.emit("user", user.userName);
+            // console.log(user);
+            localStorage.setItem("user", JSON.stringify(user));
+            const loggedInUserInfoString = localStorage.getItem("user");
+            const loggedInUserInfo = loggedInUserInfoString
+              ? JSON.parse(loggedInUserInfoString)
+              : null;
 
-          if (loggedInUserInfo || userFromLocalStorage) {
-            dispatch(setUser(loggedInUserInfo));
+            if (loggedInUserInfo || userFromLocalStorage) {
+              dispatch(setUser(loggedInUserInfo));
+            }
           }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserData();
-  }, [dispatch, token, userFromLocalStorage]);
+      };
+      getUserData();
+    }
+  }, [dispatch, socketConnection, token, userFromLocalStorage]);
 
   return (
     <>

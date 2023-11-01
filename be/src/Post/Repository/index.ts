@@ -75,12 +75,10 @@ export const updatePost = async (data: any) => {
     const { id, ...updateData } = data;
 
     const post = await Post.findById(id);
-    console.log(post);
     if (post) {
       Object.assign(post, updateData); // Update the post with new data
 
       const updatedPost = await post.save();
-      console.log("Repo after save", updatedPost);
       return {
         status: 200,
         message: "Update successful",

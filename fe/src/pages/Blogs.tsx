@@ -82,8 +82,7 @@ const Blogs = () => {
         <div className="relative bg-blue-200 dark:bg-blue-700 py-8 w-full">
           <div className="text-5xl text-center">EXPLORE BLOGS</div>
           <p className="text-center my-2">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Reiciendis, quaerat. Veritatis, at!
+            Empowering Ideas, Connecting Minds: Your Gateway to Tech Brilliance!
           </p>
           <div className="absolute -bottom-6 md:-bottom-7 flex justify-center items-center mx-auto w-full">
             <input

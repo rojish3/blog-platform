@@ -6,7 +6,6 @@ export const createUser = async (data: IUser) => {
   try {
     const { name, userName, phoneNumber, email, password, profilePicture } =
       data;
-    console.log(profilePicture);
     const userExists = await User.findOne({ email });
     if (userExists) {
       throw new Error("User already exists");
@@ -87,7 +86,6 @@ export const changePassword = async (id: any, data: any) => {
   try {
     const user = await User.findById(id);
     const { oldPassword, password } = data;
-    console.log(data);
     if (!user) {
       throw new Error("User not found");
     }

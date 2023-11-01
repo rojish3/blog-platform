@@ -49,6 +49,12 @@ io.on("connection", (socket) => {
     io.to(receiver).emit("new-like", sender + " liked your blog");
     // console.log(receiver + "Received a notification");
   });
+  socket.on("new-comment", (sender, receiver) => {
+    console.log(sender + " commented on your post");
+    console.log(receiver + " received a notification");
+    io.to(receiver).emit("new-like", sender + " commented on your blog");
+    // console.log(receiver + "Received a notification");
+  });
 });
 
 app.use("/api/images", express.static(path.join(__dirname, "uploads")));

@@ -78,7 +78,7 @@ const BlogCard: React.FC<{ blog: IBlog }> = ({ blog }) => {
             </h5>
           )}
           <div
-            className="blogStyling text-xs h-24 overflow-hidden" // Use the 'prose' class from Tailwind CSS to style the content
+            className="blogStyling text-xs h-12 overflow-hidden" // Use the 'prose' class from Tailwind CSS to style the content
             dangerouslySetInnerHTML={{ __html: blog.content.slice(0, 80) }}
           />
 

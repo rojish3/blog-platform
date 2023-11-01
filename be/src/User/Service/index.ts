@@ -86,10 +86,8 @@ export const forgotPassword = async (data: any) => {
     if (userData) {
       const userId = userData._id;
       const id = { id: userId.toHexString() };
-      console.log(id);
       const emailToken = jwt.sign(id, env.JWT_SECRET as string);
       const resetLink = `http://localhost:5173/reset-password?token=${emailToken}`;
-      console.log(resetLink);
       const mailOptions = {
         from: env.USER_EMAIL,
         to: userData.email,

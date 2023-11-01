@@ -62,6 +62,7 @@ const Signup = () => {
             theme: toastTheme,
           });
           reset();
+          navigate("/login");
         }
       }
     } catch (error: any) {

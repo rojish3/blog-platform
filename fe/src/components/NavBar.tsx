@@ -10,6 +10,7 @@ import SideBar from "./SideBar";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import ProfileDropdown from "./ProfileDropdown";
+import { clearNotification } from "../features/notificationSlice";
 // import { io } from "socket.io-client";
 // const socket = io("http://localhost:3000");
 
@@ -19,18 +20,21 @@ interface AppState {
 
 const NavBar = () => {
   const { mode }: any = useSelector((state: AppState) => state.theme);
+  const notification: string[] = useSelector(
+    (state: RootState) => state.notification
+  );
+
   const user = useSelector((state: RootState) => state.loggedInUser);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const [dropdown, setDropdown] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState(false);
-  const [notifications, setNotifications] = useState();
+  // const [notifications, setNotifications] = useState();
   const [open, setOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const token = cookies.get("token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
   // useEffect(() => {
   //   socket.on("new-like", (message) => {
   //     console.log(message);
@@ -70,7 +74,7 @@ const NavBar = () => {
   return (
     <>
       <nav
-        className={`sticky w-full top-0 left-0 z-50 h-[10vh] flex justify-between items-center p-4 md:p-6 border-b border-slate-500 ${
+        className={`sticky w-full top-0 left-0 z-50 h-[10vh] flex justify-between items-center p-4 md:p-6 border-b border-slate-300 dark:border-slate-700 ${
           scrolled && mode
             ? "bg-darkMode-bg text-darkMode-text bg-opacity-90 transition-all ease-in-out duration-200"
             : scrolled && !mode
@@ -154,16 +158,38 @@ const NavBar = () => {
             {token ? (
               <div className="flex items-center gap-8">
                 <div className="relative cursor-pointer">
-                  {/* <div className="absolute left-0 top-0 bg-red-500 rounded-full">
-                    <span className="text-xs text-white p-1">12</span>
-                  </div> */}
+                  {notification.length > 0 ? (
+                    <div className="absolute left-0 top-0 bg-red-500 rounded-full">
+                      <span className="text-xs text-white p-1">
+                        {notification.length}
+                      </span>
+                    </div>
+                  ) : null}
+
                   <div className="p-2" onClick={() => setOpen(!open)}>
                     <BsBell size={24} />
                   </div>
                   {open ? (
                     <div className="absolute border max-w-xl z-50 w-56 h-auto flex flex-col gap-2 p-2 shadow-lg rounded-lg mt-5 bg-secondary-bg text-primary-text dark:bg-secondary-darkMode-bg dark:text-darkMode-text">
-                      Notifications:
-                      {/* {notifications} */}
+                      {/* Notifications: */}
+                      <ul>
+                        {notification.map((noti, index) => (
+                          <li key={index}>{noti}</li>
+                        ))}
+                      </ul>
+                      {notification.length > 0 ? (
+                        <button
+                          className="hover:bg-gray-500 rounded-full py-1"
+                          onClick={() => {
+                            dispatch(clearNotification());
+                            setOpen(false);
+                          }}
+                        >
+                          clear
+                        </button>
+                      ) : (
+                        <p>No new Notifications</p>
+                      )}
                     </div>
                   ) : null}
                 </div>
@@ -214,19 +240,40 @@ const NavBar = () => {
           {token ? (
             <div className="flex items-center gap-2">
               <div className="relative cursor-pointer">
-                <div className="absolute left-0 top-0  bg-red-500 rounded-full">
-                  <span className="text-sm text-white p-1">12</span>
+                {notification.length > 0 ? (
+                  <div className="absolute left-0 top-0 bg-red-500 rounded-full">
+                    <span className="text-xs text-white p-1">
+                      {notification.length}
+                    </span>
+                  </div>
+                ) : null}
+
+                <div className="p-2" onClick={() => setOpen(!open)}>
+                  <BsBell size={24} />
                 </div>
-                <div className="p-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    className="text-gray-600 w-6 h-6"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
-                  </svg>
-                </div>
+                {open ? (
+                  <div className="absolute border max-w-xl z-50 w-56 h-auto flex flex-col gap-2 p-2 shadow-lg rounded-lg mt-5 bg-secondary-bg text-primary-text dark:bg-secondary-darkMode-bg dark:text-darkMode-text">
+                    {/* Notifications: */}
+                    <ul>
+                      {notification.map((noti, index) => (
+                        <li key={index}>{noti}</li>
+                      ))}
+                    </ul>
+                    {notification.length > 0 ? (
+                      <button
+                        className="hover:bg-gray-500 rounded-full py-1"
+                        onClick={() => {
+                          dispatch(clearNotification());
+                          setOpen(false);
+                        }}
+                      >
+                        clear
+                      </button>
+                    ) : (
+                      <p>No new Notifications</p>
+                    )}
+                  </div>
+                ) : null}
               </div>
               <button
                 type="button"
@@ -271,5 +318,4 @@ const NavBar = () => {
     </>
   );
 };
-
 export default NavBar;

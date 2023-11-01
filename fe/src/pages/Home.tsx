@@ -53,11 +53,11 @@ const Home = () => {
         >
           <div className="flex flex-col justify-center items-center h-[70%] gap-4">
             <h1 className="text-6xl font-bold text-center">
-              EXPRESS YOURSELF WITH WORDS
+              Inspiring Tech Discoveries, One Byte at a Time!
             </h1>
             <h3 className="text-xl text-center">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-              iste cumque quos!
+              Empowering Ideas, Connecting Minds: Your Gateway to Tech
+              Brilliance!
             </h3>
             <button
               type="button"
@@ -115,17 +115,22 @@ const Home = () => {
           <div className="md:w-[50%]">
             <h1 className="text-5xl font-bold mb-8">About Us</h1>
             <p className="text-xl mb-4">
-              Our blog is a place where we share our thoughts and ideas on a
-              variety of topics, including technology, business, and lifestyle.
-              We are passionate about sharing knowledge and helping others learn
-              and grow.
+              Welcome to TechVerse, where the realm of technology meets a
+              passionate community of enthusiasts. Our platform is a dedicated
+              space for the tech-savvy, the curious, and the innovative minds
+              seeking to explore, learn, and connect. At TechVerse, we thrive on
+              the belief that knowledge should be shared, explored, and
+              celebrated. We are a vibrant community-driven blog application
+              committed to delivering insightful, up-to-date content and
+              fostering engaging discussions on all things tech-related. We
+              cater to a wide spectrum of tech aficionados, from seasoned
+              professionals to eager learners, fostering an environment that
+              encourages knowledge exchange and collaboration.
             </p>
             <p className="text-lg mb-4">
-              We believe that everyone has something valuable to share, and we
-              encourage our readers to leave comments and feedback on our posts.
-              We hope that our blog can be a forum for discussion and learning,
-              and that it can help our readers to connect with others who share
-              their interests.
+              Our content spans across diverse technological domains - be it the
+              latest advancements in AI, cybersecurity, software engineering,
+              design thinking, or upcoming trends that are shaping our future.
             </p>
             <p className="text-lg">
               Thank you for visiting our blog! We hope you enjoy reading our

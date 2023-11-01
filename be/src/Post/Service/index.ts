@@ -40,7 +40,6 @@ export const listPostBySingleUser = async (id: any) => {
 export const updatePost = async (data: any) => {
   try {
     const updatedPost = await PostRepository.updatePost(data);
-    console.log("Service", updatedPost);
     return updatedPost;
   } catch (error) {
     return error;

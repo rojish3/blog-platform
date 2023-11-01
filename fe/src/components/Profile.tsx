@@ -38,7 +38,11 @@ const Profile: React.FC = () => {
 
   function formatDate(inputDate: string) {
     const date = new Date(inputDate);
-    const options = { year: "numeric", month: "short", day: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
     return date.toLocaleDateString(undefined, options);
   }
 

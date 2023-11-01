@@ -25,7 +25,7 @@ export const likePost = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "Post liked successfully", liked: true });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: "Error while liking the post" });
   }
 };
@@ -51,7 +51,7 @@ export const unlikePost = async (req: Request, res: Response) => {
       res.status(404).json({ message: "Like entry not found" });
     }
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: "Error while unliking the post" });
   }
 };
@@ -63,7 +63,7 @@ export const likesCount = async (req: Request, res: Response) => {
     const likeCount = await Reaction.countDocuments({ postId, liked: true });
     res.status(200).json({ likeCount });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: "Error while getting the like count" });
   }
 };

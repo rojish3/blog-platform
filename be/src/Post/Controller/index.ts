@@ -78,11 +78,9 @@ export const getPostById = async (req: Request, res: Response) => {
 
 export const listPostBySingleUser = async (req: Request, res: Response) => {
   try {
-    // const id = req.params.userName;
     const user = res.locals.user;
     const id = user.id;
-    // console.log(id);
-    // console.log(id);
+
     res.status(200).json(await PostService.listPostBySingleUser(id));
   } catch (error) {
     res.status(400).json(error);
@@ -96,7 +94,6 @@ export const updatePost = async (req: Request, res: Response) => {
     const userId = user.id;
     const userName = user.userName;
     const id = req.params.id;
-    console.log(id);
     const { status, message, data } = (await PostService.updatePost({
       id,
       ...req.body,

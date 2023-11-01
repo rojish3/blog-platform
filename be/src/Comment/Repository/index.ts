@@ -3,12 +3,17 @@ import User from "../../Model/user.model";
 
 export const createComment = async (data: any) => {
   try {
-    console.log(data);
     const newComment = await Comment.create(data);
+    const populatedComment = await Comment.findById(newComment._id).populate({
+      path: "userId",
+      select: "userName profilePicture",
+      model: User,
+    });
+
     return {
       status: 201,
       message: "Comment created successfully",
-      data: newComment,
+      data: populatedComment, // Return the populated comment data
     };
   } catch (error) {
     return error;
@@ -53,10 +58,19 @@ export const deleteComment = async (id: any) => {
   }
 };
 
-export const getCommentCount = async (id: any) => {
+export const getCommentCount = async (id: string) => {
   try {
     const commentCount = await Comment.countDocuments({ postId: id });
     return commentCount;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getCommentByUser = async (id: string) => {
+  try {
+    const comment = await Comment.find({ userId: id });
+    return comment;
   } catch (error) {
     return error;
   }

@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "../schema/loginSchema";
 import NavBar from "../components/NavBar";
 import RegisterImg from "../assets/register.png";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -69,25 +69,21 @@ const Login = () => {
         // Dispatch the user data to the Redux store
         dispatch(setUser(loggedInUserInfo));
 
-        toast.success(userData.data.message, {
-          position: "top-left",
-          autoClose: 1000,
-          theme: toastTheme,
-        });
+        toast.success(userData.data.message);
 
         navigate("/");
       }
-    } catch (error: Error) {
-      const errors = error as Error | AxiosError;
-      if (!axios.isAxiosError(errors)) {
-        if (error.response.status === 401 || error.status === 400) {
-          toast.error(error.response.data.message, {
-            position: "top-left",
-            autoClose: 1000,
-            theme: toastTheme,
-          });
-        }
-      }
+    } catch (error: any) {
+      // const errors = error as Error | AxiosError;
+      // if (!axios.isAxiosError(errors)) {
+      //   if (error.response.status === 401 || error.status === 400) {
+      toast.error(error.response.data.message, {
+        position: "top-left",
+        autoClose: 1000,
+        theme: toastTheme,
+      });
+      //   }
+      // }
     }
   };
 
