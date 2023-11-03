@@ -68,7 +68,6 @@ const Login = () => {
         // console.log(loggedInUserInfo);
         // Dispatch the user data to the Redux store
         dispatch(setUser(loggedInUserInfo));
-
         toast.success(userData.data.message);
 
         navigate("/");

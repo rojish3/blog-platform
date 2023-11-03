@@ -12,7 +12,7 @@ import BlogCardSkeleton from "../components/BlogCardSkeleton";
 import BlogsCards from "../components/BlogsCards";
 import BlogListSkeleton from "../components/BlogListSkeleton";
 import debounce from "lodash/debounce";
-import { defaultBlogRender } from "../constant";
+import { defaultBlogRender, BASE_URL } from "../utils/constants";
 
 const Blogs = () => {
   const cookies = new Cookies();
@@ -33,7 +33,7 @@ const Blogs = () => {
       try {
         setIsLoading(true);
         const posts = await axios.get(
-          `http://localhost:3000/api/posts?page=${currentPage}&limit=${postsPerPage}&sortBy=${sortData}&category=${selectedCategory}&searchQuery=${searchInput}`
+          `${BASE_URL}/posts?page=${currentPage}&limit=${postsPerPage}&sortBy=${sortData}&category=${selectedCategory}&searchQuery=${searchInput}`
         );
         setPageNumber(posts.data.totalPages);
         const data = posts.data.data;

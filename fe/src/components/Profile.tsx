@@ -7,7 +7,7 @@ import BlogsCards from "./BlogsCards";
 import UpdateProfile from "./EditProfile";
 import { IBlog } from "../types/post.types";
 import BlogListSkeleton from "./BlogListSkeleton";
-import { defaultBlogRender } from "../constant";
+import { defaultBlogRender } from "../utils/constants";
 
 const Profile: React.FC = () => {
   const [postData, setPostData] = useState<IBlog[] | null>(null);
