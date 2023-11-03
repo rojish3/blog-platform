@@ -7,12 +7,10 @@ export const createComment = async (req: Request, res: Response) => {
     const user = res.locals.user;
     const userId = user.id;
     // console.log(userId);
-    const userName = user.userName;
     const profilePicture = user.profilePicture;
     const { status, message, data } = (await CommentService.createComment({
       ...req.body,
       userId,
-      userName,
       profilePicture,
     })) as IResponse;
     res.status(status).json({ message, data });

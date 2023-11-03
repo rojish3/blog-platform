@@ -1,7 +1,8 @@
 import Comment from "../../Model/comment.model";
 import User from "../../Model/user.model";
+import { IComment } from "../../types/comment.types";
 
-export const createComment = async (data: any) => {
+export const createComment = async (data: IComment) => {
   try {
     const newComment = await Comment.create(data);
     const populatedComment = await Comment.findById(newComment._id).populate({
@@ -20,7 +21,7 @@ export const createComment = async (data: any) => {
   }
 };
 
-export const getCommentByPostId = async (id: any) => {
+export const getCommentByPostId = async (id: string) => {
   try {
     const post = await Comment.find({ postId: id }).populate({
       path: "userId",
@@ -33,7 +34,7 @@ export const getCommentByPostId = async (id: any) => {
   }
 };
 
-export const getCommentById = async (id: any) => {
+export const getCommentById = async (id: string) => {
   try {
     const post = await Comment.findById(id).populate({
       path: "userId",
@@ -46,7 +47,7 @@ export const getCommentById = async (id: any) => {
   }
 };
 
-export const deleteComment = async (id: any) => {
+export const deleteComment = async (id: string) => {
   try {
     const comment = await Comment.findByIdAndDelete(id);
     return {

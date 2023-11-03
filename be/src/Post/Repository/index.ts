@@ -1,6 +1,7 @@
 import { IPost } from "../../types/post.types";
 import Post from "../../Model/post.model";
 import User from "../../Model/user.model";
+import { IQuery } from "../../types/query.types";
 
 export const createPost = async (post: IPost) => {
   try {
@@ -15,7 +16,7 @@ export const createPost = async (post: IPost) => {
   }
 };
 
-export const listAllPost = async (query: any) => {
+export const listAllPost = async (query: IQuery) => {
   try {
     const { page, limit, skip, filters, sort } = query;
     const totalPosts = await Post.countDocuments();
@@ -40,7 +41,7 @@ export const listAllPost = async (query: any) => {
   }
 };
 
-export const getPostById = async (id: any) => {
+export const getPostById = async (id: string) => {
   try {
     const post = await Post.findById(id).populate({
       path: "userId",
@@ -57,7 +58,7 @@ export const getPostById = async (id: any) => {
   }
 };
 
-export const listPostBySingleUser = async (id: any) => {
+export const listPostBySingleUser = async (id: string) => {
   try {
     const post = await Post.find({ userId: id }).populate({
       path: "userId",
@@ -70,7 +71,7 @@ export const listPostBySingleUser = async (id: any) => {
   }
 };
 
-export const updatePost = async (data: any) => {
+export const updatePost = async (data: IPost) => {
   try {
     const { id, ...updateData } = data;
 
@@ -90,7 +91,7 @@ export const updatePost = async (data: any) => {
   }
 };
 
-export const deletePost = async (id: any) => {
+export const deletePost = async (id: string) => {
   try {
     const post = await Post.findByIdAndDelete(id);
     return {

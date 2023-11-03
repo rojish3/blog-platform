@@ -1,12 +1,13 @@
 import { ObjectId } from "mongodb";
 
 export interface IPost {
-  image?: String;
-  title: String;
-  content: String;
-  category: String;
+  id?: string;
+  image?: string;
+  title: string;
+  content: string;
+  category: string;
   userId: ObjectId;
-  views: Number;
+  views: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

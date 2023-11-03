@@ -1,6 +1,8 @@
 import User from "../../Model/user.model";
 import bcrypt from "bcrypt";
 import { IUser } from "../../types/user.types";
+import { ILogin } from "../../types/login.types";
+import { IPassword } from "../../types/changePassword.types";
 
 export const createUser = async (data: IUser) => {
   try {
@@ -30,7 +32,7 @@ export const createUser = async (data: IUser) => {
   }
 };
 
-export const loginUser = async (data: any) => {
+export const loginUser = async (data: ILogin) => {
   try {
     const { email, password } = data;
     const userInfo = await User.findOne({ email });
@@ -60,7 +62,7 @@ export const listAllUsers = async () => {
   }
 };
 
-export const updateUser = async (data: any) => {
+export const updateUser = async (data: IUser) => {
   try {
     const user = await User.findById(data.id);
     if (user) {
@@ -82,7 +84,7 @@ export const updateUser = async (data: any) => {
   }
 };
 
-export const changePassword = async (id: any, data: any) => {
+export const changePassword = async (id: string, data: IPassword) => {
   try {
     const user = await User.findById(id);
     const { oldPassword, password } = data;
@@ -111,9 +113,8 @@ export const changePassword = async (id: any, data: any) => {
   }
 };
 
-export const forgotPassword = async (data: any) => {
+export const forgotPassword = async (email: string) => {
   try {
-    const { email } = data;
     const userData = await User.findOne({ email });
     if (!userData) {
       throw new Error("User not found");
@@ -124,7 +125,7 @@ export const forgotPassword = async (data: any) => {
   }
 };
 
-export const resetPassword = async (token: any, password: string) => {
+export const resetPassword = async (token: string, password: string) => {
   try {
     const userData = await User.findById(token);
     if (!userData) {

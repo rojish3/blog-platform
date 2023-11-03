@@ -4,6 +4,8 @@ import { IUser } from "../../types/user.types";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { env } from "../../config";
+import { ILogin } from "../../types/login.types";
+import { IPassword } from "../../types/changePassword.types";
 
 // const generateToken = (id) => {
 //   return jwt.sign(id, env.JWT_SECRET, { expiresIn: "1d" });
@@ -22,7 +24,7 @@ export const createUser = async (data: IUser) => {
   }
 };
 
-export const loginUser = async (user: any) => {
+export const loginUser = async (user: ILogin) => {
   try {
     const { status, data, message } = await UserRepository.loginUser(user);
     if (status === 200) {
@@ -40,7 +42,7 @@ export const loginUser = async (user: any) => {
   }
 };
 
-export const loginStatus = async (token: any) => {
+export const loginStatus = async (token: string) => {
   try {
     if (!token) {
       return false;
@@ -61,7 +63,7 @@ export const listUsers = async () => {
   }
 };
 
-export const updateUser = async (data: any) => {
+export const updateUser = async (data: IUser) => {
   try {
     const updatedUser = await UserRepository.updateUser(data);
     return updatedUser;
@@ -70,7 +72,7 @@ export const updateUser = async (data: any) => {
   }
 };
 
-export const changePassword = async (id: any, data: any) => {
+export const changePassword = async (id: string, data: IPassword) => {
   try {
     const changedPassword = await UserRepository.changePassword(id, data);
     return changedPassword;
@@ -79,9 +81,9 @@ export const changePassword = async (id: any, data: any) => {
   }
 };
 
-export const forgotPassword = async (data: any) => {
+export const forgotPassword = async (email: string) => {
   try {
-    const userData = await UserRepository.forgotPassword(data);
+    const userData = await UserRepository.forgotPassword(email);
     // console.log(userEmail);
     if (userData) {
       const userId = userData._id;

@@ -113,7 +113,8 @@ export const changePassword = async (req: Request, res: Response) => {
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
-    res.status(200).json(await UserServices.forgotPassword(req.body));
+    const email = req.body;
+    res.status(200).json(await UserServices.forgotPassword(email));
   } catch (error) {
     res.status(400).json(error);
   }
@@ -121,7 +122,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
   try {
-    const { token } = req.query;
+    const token = req.query;
     const { password } = req.body;
     res.status(200).json(await UserServices.resetPassword(token, password));
   } catch (error) {

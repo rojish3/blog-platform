@@ -1,5 +1,6 @@
 import * as PostRepository from "../Repository";
 import { IPost } from "../../types/post.types";
+import { IQuery } from "../../types/query.types";
 
 export const createPost = async (post: IPost) => {
   try {
@@ -10,7 +11,7 @@ export const createPost = async (post: IPost) => {
   }
 };
 
-export const listAllPost = async (query: any) => {
+export const listAllPost = async (query: IQuery) => {
   try {
     const allPost = await PostRepository.listAllPost(query);
     return allPost;
@@ -19,7 +20,7 @@ export const listAllPost = async (query: any) => {
   }
 };
 
-export const getPostById = async (id: any) => {
+export const getPostById = async (id: string) => {
   try {
     const post = await PostRepository.getPostById(id);
     return post;
@@ -28,7 +29,7 @@ export const getPostById = async (id: any) => {
   }
 };
 
-export const listPostBySingleUser = async (id: any) => {
+export const listPostBySingleUser = async (id: string) => {
   try {
     const userPost = await PostRepository.listPostBySingleUser(id);
     return userPost;
@@ -37,7 +38,7 @@ export const listPostBySingleUser = async (id: any) => {
   }
 };
 
-export const updatePost = async (data: any) => {
+export const updatePost = async (data: IPost) => {
   try {
     const updatedPost = await PostRepository.updatePost(data);
     return updatedPost;
@@ -46,7 +47,7 @@ export const updatePost = async (data: any) => {
   }
 };
 
-export const deletePost = async (id: any) => {
+export const deletePost = async (id: string) => {
   try {
     const deletedPost = await PostRepository.deletePost(id);
     return deletedPost;

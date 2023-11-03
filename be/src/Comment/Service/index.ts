@@ -1,6 +1,7 @@
+import { IComment } from "../../types/comment.types";
 import * as CommentRepository from "../Repository";
 
-export const createComment = async (data: any) => {
+export const createComment = async (data: IComment) => {
   try {
     const newComment = await CommentRepository.createComment(data);
     return newComment;
@@ -9,7 +10,7 @@ export const createComment = async (data: any) => {
   }
 };
 
-export const getCommentByPostId = async (id: any) => {
+export const getCommentByPostId = async (id: string) => {
   try {
     const comment = await CommentRepository.getCommentByPostId(id);
     return comment;
@@ -18,7 +19,7 @@ export const getCommentByPostId = async (id: any) => {
   }
 };
 
-export const getCommentById = async (id: any) => {
+export const getCommentById = async (id: string) => {
   try {
     const comment = await CommentRepository.getCommentById(id);
     return comment;
@@ -27,7 +28,7 @@ export const getCommentById = async (id: any) => {
   }
 };
 
-export const deleteComment = async (id: any) => {
+export const deleteComment = async (id: string) => {
   try {
     const comment = await CommentRepository.deleteComment(id);
     return comment;
@@ -36,7 +37,7 @@ export const deleteComment = async (id: any) => {
   }
 };
 
-export const getCommentCount = async (id: any) => {
+export const getCommentCount = async (id: string) => {
   try {
     const commentCount = await CommentRepository.getCommentCount(id);
     return commentCount;

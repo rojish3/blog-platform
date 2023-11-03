@@ -16,12 +16,10 @@ export const createPost = async (req: Request, res: Response) => {
     const image = req.file?.filename;
     const user = res.locals.user;
     const userId = user.id;
-    const userName = user.userName;
     const { status, message, data } = (await PostService.createPost({
       ...req.body,
       image,
       userId,
-      userName,
     })) as IResponse;
     res.status(status).json({ message, data });
   } catch (error) {
@@ -46,11 +44,11 @@ export const listAllPost = async (req: Request, res: Response) => {
 
     const sort: { [key: string]: number } = {};
     if (req.query.sortBy === "latest") {
-      sort.createdAt = -1; // Sort by newest to oldest
+      sort.createdAt = -1; // Sort by latest to oldest
     } else if (req.query.sortBy === "oldest") {
-      sort.createdAt = 1; // Sort by oldest to newest
+      sort.createdAt = 1; // Sort by oldest to latest
     } else if (req.query.sortBy === "popular") {
-      sort.views = -1; // Sort by views in descending order
+      sort.views = -1; // Sort by popular with reference to views
     }
     const { status, currentPage, totalPages, totalPosts, data } =
       (await PostService.listAllPost({
